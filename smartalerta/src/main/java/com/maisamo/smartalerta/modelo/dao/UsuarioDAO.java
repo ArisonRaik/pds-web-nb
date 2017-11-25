@@ -35,7 +35,7 @@ public class UsuarioDAO {
             preparador = conexao.prepareStatement(sql);
             preparador.setString(1, usuario.getNome());
             preparador.setString(2, usuario.getLogin());
-            preparador.setString(3, Seguranca.Criptografar(usuario.getSenha()));
+            preparador.setString(3, Seguranca.paraMD5(usuario.getSenha()));
             preparador.setString(4, usuario.getEmail());
             preparador.execute();
 
@@ -57,7 +57,7 @@ public class UsuarioDAO {
             preparador = conexao.prepareStatement(sql);
             preparador.setString(1, usuario.getNome());
             preparador.setString(2, usuario.getLogin());
-            preparador.setString(3, Seguranca.Criptografar(usuario.getSenha()));
+            preparador.setString(3, Seguranca.paraMD5(usuario.getSenha()));
             preparador.setString(4, usuario.getEmail());
             preparador.setLong(5, usuario.getId());
             preparador.execute();
@@ -153,7 +153,7 @@ public class UsuarioDAO {
             conexao = ConexaoBanco.abrirConexao();
             preparador = conexao.prepareStatement(sql);
             preparador.setString(1, login);
-            preparador.setString(2, Seguranca.Criptografar(senha));
+            preparador.setString(2, Seguranca.paraMD5(senha));
 
             rs = preparador.executeQuery();
 

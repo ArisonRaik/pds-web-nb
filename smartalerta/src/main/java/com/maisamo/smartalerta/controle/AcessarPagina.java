@@ -12,6 +12,15 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import java.time.LocalDateTime;
+
+import com.maisamo.smartalerta.modelo.fachada.AcessoPaginaFacede;
+import com.maisamo.smartalerta.modelo.entidade.AcessoPagina;
+import com.maisamo.smartalerta.modelo.servico.Seguranca;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -19,6 +28,9 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "AcessarPagina", urlPatterns = {"/AcessarPagina"})
 public class AcessarPagina extends HttpServlet {
+
+    private HttpSession sessao = null;
+    private AcessoPaginaFacede apf = null;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,7 +49,7 @@ public class AcessarPagina extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet AcessarPagina</title>");            
+            out.println("<title>Servlet AcessarPagina</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet AcessarPagina at " + request.getContextPath() + "</h1>");
@@ -58,7 +70,23 @@ public class AcessarPagina extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        apf = new AcessoPaginaFacede();
+        AcessoPagina acesso_pagina = new AcessoPagina();
+        acesso_pagina.setDataHoraAcesso(LocalDateTime.now());
+        apf.inserir(acesso_pagina);
+
+        sessao = request.getSession(true);
+        try {
+            sessao.setAttribute("from", Seguranca.deRSA(request.getParameter("frm")));
+            sessao.setAttribute("to", Seguranca.deRSA(request.getParameter("par")));
+            sessao.setAttribute("categoria", Seguranca.deRSA(request.getParameter("cat")));
+            sessao.setAttribute("titulo", Seguranca.deRSA(request.getParameter("tit")));
+            sessao.setAttribute("mensagem", Seguranca.deRSA(request.getParameter("msg")));
+
+            response.sendRedirect("acesso_pagina.jsp");
+        } catch (Exception ex) {
+            Logger.getLogger(AcessarPagina.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -72,7 +100,6 @@ public class AcessarPagina extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
     }
 
     /**

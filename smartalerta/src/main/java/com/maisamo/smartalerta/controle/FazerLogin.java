@@ -12,6 +12,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import com.maisamo.smartalerta.modelo.fachada.UsuarioFacede;
+import com.maisamo.smartalerta.modelo.entidade.Usuario;
 
 /**
  *
@@ -20,6 +24,10 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "FazerLogin", urlPatterns = {"/FazerLogin"})
 public class FazerLogin extends HttpServlet {
 
+    private HttpSession sessao = null;
+    
+    private UsuarioFacede uf = new UsuarioFacede();
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -37,7 +45,7 @@ public class FazerLogin extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet FazerLogin</title>");            
+            out.println("<title>Servlet FazerLogin</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet FazerLogin at " + request.getContextPath() + "</h1>");
@@ -72,7 +80,22 @@ public class FazerLogin extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        boolean valido = false;
+
+        String login = request.getParameter("loginUsuario");
+        String senha = request.getParameter("loginSenha");
+
+        System.out.println(login + " " + senha);
+        Usuario u = uf.autenticar(login, senha);
+
+        if (u != null) {
+            sessao = request.getSession(true);
+            sessao.setAttribute("usuario", u);
+            response.sendRedirect("cadastrar_alerta.jsp");
+        } else {
+            request.setAttribute("valido", valido);
+            request.getServletContext().getRequestDispatcher("/login.jsp").forward(request, response);
+        }
     }
 
     /**

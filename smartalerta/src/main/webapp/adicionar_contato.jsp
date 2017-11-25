@@ -50,7 +50,7 @@
             <div class="side-navbar-wrapper">
                 <div class="sidenav-header d-flex align-items-center justify-content-center">
                     <div class="sidenav-header-inner text-center"><img src="img/avatar-1.jpg" alt="person" class="img-fluid rounded-circle">
-                        <h2 class="h5 text-uppercase">${usuario.nome}</h2>
+                        <h2 class="h5 text-uppercase">${sessionScope.usuario.nome}</h2>
                     </div>
                     <div class="sidenav-header-logo"><a href="index.html" class="brand-small text-center"> <strong>S</strong><strong class="text-primary">A</strong></a></div>
                 </div>

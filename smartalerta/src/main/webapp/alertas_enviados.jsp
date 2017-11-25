@@ -51,7 +51,7 @@
             <div class="side-navbar-wrapper">
                 <div class="sidenav-header d-flex align-items-center justify-content-center">
                     <div class="sidenav-header-inner text-center"><img src="img/avatar-1.jpg" alt="person" class="img-fluid rounded-circle">
-                        <h2 class="h5 text-uppercase">${usuario.nome}</h2>
+                        <h2 class="h5 text-uppercase">${sessionScope.usuario.nome}</h2>
                     </div>
                     <div class="sidenav-header-logo"><a href="index.html" class="brand-small text-center"> <strong>S</strong><strong class="text-primary">A</strong></a></div>
                 </div>
@@ -130,7 +130,7 @@
                                             </tr>
                                         </tfoot>
                                         <tbody>
-                                            <c:forEach var="alerta_enviado" items="${alertas_enviados}">
+                                            <c:forEach var="alerta_enviado" items="${sessionScope.alertas_enviados}">
                                                 <tr>
                                                     <td>${alerta_enviado.datahora_envio}</td>
                                                     <td>${alerta_enviado.alerta.categoria}</td>
@@ -153,7 +153,7 @@
                                         <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">&times;</span></button>
                                     </div>
                                     <div class="modal-body">
-                                        <c:forEach var="contato_por_envio" items="${contatos_por_envio}">
+                                        <c:forEach var="contato_por_envio" items="${sessionScope.contatos_por_envio}">
                                             <p><strong>${contato_por_envio.nome}</strong></p>
                                         </c:forEach>
                                     </div>

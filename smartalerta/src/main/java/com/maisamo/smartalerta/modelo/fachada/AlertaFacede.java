@@ -42,4 +42,8 @@ public class AlertaFacede {
     public boolean procurar(String valor, String coluna) {
         return adao.procurar(valor, coluna);
     }
+    
+    public Alerta procurarPorTitulo(String titulo, Usuario usuario) {
+        return adao.procurarPorTitulo(titulo, usuario);
+    }
 }

@@ -30,7 +30,7 @@ import java.util.logging.Logger;
 public class AcessarPagina extends HttpServlet {
 
     private HttpSession sessao = null;
-    private AcessoPaginaFacede apf = null;
+    private final AcessoPaginaFacede apf = new AcessoPaginaFacede();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -70,7 +70,6 @@ public class AcessarPagina extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        apf = new AcessoPaginaFacede();
         AcessoPagina acesso_pagina = new AcessoPagina();
         acesso_pagina.setDataHoraAcesso(LocalDateTime.now());
         apf.inserir(acesso_pagina);
@@ -100,6 +99,7 @@ public class AcessarPagina extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        processRequest(request, response);
     }
 
     /**

@@ -12,6 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -37,7 +38,7 @@ public class FazerLogout extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet FazerLogout</title>");            
+            out.println("<title>Servlet FazerLogout</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet FazerLogout at " + request.getContextPath() + "</h1>");
@@ -72,7 +73,14 @@ public class FazerLogout extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        HttpSession sessao = request.getSession(false);
+
+        if (sessao != null) {
+            sessao.setAttribute("usuario", null);
+            sessao.invalidate();
+        }
+
+        response.sendRedirect("login.jsp");
     }
 
     /**

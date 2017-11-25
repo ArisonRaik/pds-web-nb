@@ -14,9 +14,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 import com.maisamo.smartalerta.modelo.fachada.AlertaFacede;
+import com.maisamo.smartalerta.modelo.fachada.ContatoFacede;
 import com.maisamo.smartalerta.modelo.fachada.PaginaFacede;
 import com.maisamo.smartalerta.modelo.fachada.EnvioAlertaFacede;
 import com.maisamo.smartalerta.modelo.fachada.EnvioAlertaContatoFacede;
@@ -38,7 +39,15 @@ import com.maisamo.smartalerta.modelo.servico.Enviador;
 public class EnviarAlerta extends HttpServlet {
 
     private HttpSession sessao = null;
-
+    private final AlertaFacede af = new AlertaFacede();
+    private final ContatoFacede cf = new ContatoFacede();
+    private final EnvioAlertaFacede eaf = new EnvioAlertaFacede();
+    private final EnvioAlertaContatoFacede eacf = new EnvioAlertaContatoFacede();
+    private final PaginaFacede pf = new PaginaFacede();
+    
+    private Pagina pag = null;
+    private Enviador env = null;
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -92,27 +101,51 @@ public class EnviarAlerta extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         verificarSessao(request, response);
-
-        Usuario usuario = (Usuario) sessao.getAttribute("usuario");
+        
+        Usuario u = (Usuario) sessao.getAttribute("usuario");
         String[] enviarPara = request.getParameterValues("enviarPara");
-        String alerta = request.getParameter("alerta");
-        //Pagina pagina = new Pagina();
-        //pagina.addParam("nome=" + contato.getNome);
-        //pagina.addParam("&titulo=" + alerta.getTitulo());
-        //pagina.addParam("&categoria=" + alerta.getCategoria());
-        //pagina.addParam("&mensagem=" + alerta.getMensagem());
-        String nomeFrom = usuario.getNome();
-        String emailFrom = usuario.getEmail();
-        String nomeTo = request.getParameter("nome");
-
-        String emailTo = request.getParameter("email");
-        String foneTo = request.getParameter("telefone");
-        String mensagem = request.getParameter("mensagem");
-        String assunto = request.getParameter("tipo_alerta");
-        String url = "https://www.youtube.com/";
-        Enviador env = new Enviador();
-        env.enviarEmail();
-        response.sendRedirect("enviar_alerta.jsp");
+        Alerta a = af.procurarPorTitulo(request.getParameter("titulo"), u);
+        
+        EnvioAlerta ea = new EnvioAlerta(a);
+        ea.setDataHoraEnvio(LocalDateTime.now());
+        eaf.inserir(ea);
+        
+        env = new Enviador();
+        
+        for (String id: enviarPara) {
+            //Recupera um contato
+            Contato c = cf.procurarPorId(Long.parseLong(id));
+            
+            //Registro de contatos que receberam este alerta 
+            EnvioAlertaContato eac = new EnvioAlertaContato(c, ea);
+            eacf.inserir(eac);
+            
+            //Cria uma página por contato
+            pag = new Pagina(a, u, c);
+            
+            //De quem?
+            env.setNomeFrom(u.getNome());
+            env.setEmailFrom(u.getEmail());
+            
+            //Para quem?
+            env.setNomeTo(c.getNome());
+            env.setEmailTo(c.getEmail());
+            //env.setFoneTo(c.getFone());
+            
+            //O que?
+            env.setAssunto(a.getCategoria());
+            env.setTitulo(a.getTitulo());
+            env.setMensagem(a.getMensagem());
+            
+            //Link para acessar a página
+            env.setUrl(pag.getUrl());
+            
+            //Envia o email
+            env.enviarEmail();
+        }
+        
+        request.setAttribute("valido", true);
+        request.getServletContext().getRequestDispatcher("/enviar_alerta.jsp").forward(request, response);
     }
 
     private void verificarSessao(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

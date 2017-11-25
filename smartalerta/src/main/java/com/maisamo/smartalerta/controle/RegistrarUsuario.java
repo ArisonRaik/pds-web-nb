@@ -13,12 +13,17 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.maisamo.smartalerta.modelo.fachada.UsuarioFacede;
+import com.maisamo.smartalerta.modelo.entidade.Usuario;
+
 /**
  *
  * @author wagner
  */
 @WebServlet(name = "RegistrarUsuario", urlPatterns = {"/RegistrarUsuario"})
 public class RegistrarUsuario extends HttpServlet {
+
+    private UsuarioFacede uf = new UsuarioFacede();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,7 +42,7 @@ public class RegistrarUsuario extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet RegistrarUsuario</title>");            
+            out.println("<title>Servlet RegistrarUsuario</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet RegistrarUsuario at " + request.getContextPath() + "</h1>");
@@ -72,7 +77,38 @@ public class RegistrarUsuario extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        boolean nome_valido = true;
+        boolean login_valido = true;
+        boolean email_valido = true;
+
+        String nome = request.getParameter("registroNome");
+        String email = request.getParameter("registroEmail");
+        String login = request.getParameter("registroUsuario");
+        String senha = request.getParameter("registroSenha");
+
+        if (uf.procurar(nome, "nome")) {
+            nome_valido = false;
+        }
+        if (uf.procurar(login, "login")) {
+            login_valido = false;
+        }
+        if (uf.procurar(email, "email")) {
+            email_valido = false;
+        }
+
+        if (nome_valido && login_valido && email_valido) {
+            Usuario u = new Usuario();
+            u.setNome(nome);
+            u.setLogin(login);
+            u.setSenha(senha);
+            u.setEmail(email);
+
+            uf.inserir(u);
+        }
+        request.setAttribute("nome_valido", nome_valido);
+        request.setAttribute("login_valido", login_valido);
+        request.setAttribute("email_valido", email_valido);
+        request.getServletContext().getRequestDispatcher("/registro.jsp").forward(request, response);
     }
 
     /**

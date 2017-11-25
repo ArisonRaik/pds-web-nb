@@ -12,6 +12,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import com.maisamo.smartalerta.modelo.fachada.EnvioAlertaContatoFacede;
+import com.maisamo.smartalerta.modelo.fachada.EnvioAlertaFacede;
+import com.maisamo.smartalerta.modelo.entidade.EnvioAlerta;
 
 /**
  *
@@ -19,7 +24,11 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "VerContatosPorEnvio", urlPatterns = {"/VerContatosPorEnvio"})
 public class VerContatosPorEnvio extends HttpServlet {
-
+    
+    private HttpSession sessao = null;
+    private final EnvioAlertaFacede eaf = new EnvioAlertaFacede();
+    private final EnvioAlertaContatoFacede eacf = new EnvioAlertaContatoFacede();
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -58,7 +67,14 @@ public class VerContatosPorEnvio extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        verificarSessao(request, response);
+        
+        String eaid = request.getParameter("eaid");
+        EnvioAlerta ea = (EnvioAlerta) eaf.procurarPorId(Long.parseLong(eaid));
+        
+        sessao.setAttribute("contatos_por_envio", eacf.listar(ea));
+        request.setAttribute("mostrar", true);
+        request.getServletContext().getRequestDispatcher("/alertas_enviados.jsp").forward(request, response);
     }
 
     /**
@@ -72,9 +88,16 @@ public class VerContatosPorEnvio extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        verificarSessao(request, response);
     }
-
+    
+    private void verificarSessao(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        sessao = request.getSession(false);
+        if (sessao == null) {
+            response.sendRedirect("acesso_negado.jsp");
+        }
+    }
+    
     /**
      * Returns a short description of the servlet.
      *

@@ -25,8 +25,7 @@ import com.maisamo.smartalerta.modelo.entidade.Usuario;
 public class FazerLogin extends HttpServlet {
 
     private HttpSession sessao = null;
-    
-    private UsuarioFacede uf = new UsuarioFacede();
+    private final UsuarioFacede uf = new UsuarioFacede();
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -85,7 +84,6 @@ public class FazerLogin extends HttpServlet {
         String login = request.getParameter("loginUsuario");
         String senha = request.getParameter("loginSenha");
 
-        System.out.println(login + " " + senha);
         Usuario u = uf.autenticar(login, senha);
 
         if (u != null) {

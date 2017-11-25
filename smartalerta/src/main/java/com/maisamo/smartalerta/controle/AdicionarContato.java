@@ -12,6 +12,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import com.maisamo.smartalerta.modelo.fachada.ContatoFacede;
+import com.maisamo.smartalerta.modelo.entidade.Usuario;
+import com.maisamo.smartalerta.modelo.entidade.Contato;
 
 /**
  *
@@ -19,6 +24,9 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "AdicionarContato", urlPatterns = {"/AdicionarContato"})
 public class AdicionarContato extends HttpServlet {
+
+    private HttpSession sessao = null;
+    private final ContatoFacede cf = new ContatoFacede();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,7 +45,7 @@ public class AdicionarContato extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet AdicionarContato</title>");            
+            out.println("<title>Servlet AdicionarContato</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet AdicionarContato at " + request.getContextPath() + "</h1>");
@@ -58,7 +66,7 @@ public class AdicionarContato extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        verificarSessao(request, response);
     }
 
     /**
@@ -72,7 +80,35 @@ public class AdicionarContato extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        verificarSessao(request, response);
+        
+        boolean valido = true;
+
+        String nome = request.getParameter("contatoNome");
+        String email = request.getParameter("contatoEmail");
+        String fone = request.getParameter("contatoFone");
+
+        if (cf.procurar(nome, "nome")) {
+            valido = false;
+        }
+
+        if (valido) {
+            Usuario u = (Usuario) sessao.getAttribute("usuario");
+            Contato c = new Contato(u);
+            c.setNome(nome);
+            c.setEmail(email);
+            c.setFone(fone);
+            cf.inserir(c);
+        }
+        request.setAttribute("valido", valido);
+        request.getServletContext().getRequestDispatcher("/adicionar_contato").forward(request, response);
+    }
+
+    private void verificarSessao(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        sessao = request.getSession(false);
+        if (sessao == null) {
+            response.sendRedirect("acesso_negado.jsp");
+        }
     }
 
     /**

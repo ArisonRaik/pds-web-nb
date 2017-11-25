@@ -114,8 +114,8 @@
                                         <thead>
                                             <tr>
                                                 <th>Data de Envio</th>
-                                                <th>Categoria</th>
-                                                <th>Título</th>
+                                                <th>Categoria (Alerta)</th>
+                                                <th>Título (Alerta)</th>
                                                 <th>Contatos</th>
                                                 <th>Excluir</th>
                                             </tr>
@@ -123,8 +123,8 @@
                                         <tfoot>
                                             <tr>
                                                 <th>Data de Envio</th>
-                                                <th>Categoria</th>
-                                                <th>Título</th>
+                                                <th>Categoria (Alerta)</th>
+                                                <th>Título (Alerta)</th>
                                                 <th>Contatos</th>
                                                 <th>Excluir</th>
                                             </tr>
@@ -135,7 +135,7 @@
                                                     <td>${alerta_enviado.datahora_envio}</td>
                                                     <td>${alerta_enviado.alerta.categoria}</td>
                                                     <td>${alerta_enviado.alerta.titulo}</td>
-                                                    <td><button type="button" onclick="window.location.href = 'VerContatosPorEnvio?eaid=${envio_alerta.id}'" class="btn btn-outline-info">Contatos</button></td>
+                                                    <td><button type="button" onclick="window.location.href = 'VerContatosPorEnvio?eaid=${alerta_enviado.id}'" class="btn btn-outline-info">Contatos</button></td>
                                                     <td><button type="button" class="btn btn-outline-danger">Excluir</button></td>
                                                 </tr>
                                             </c:forEach>
@@ -154,9 +154,8 @@
                                     </div>
                                     <div class="modal-body">
                                         <c:forEach var="contato_por_envio" items="${contatos_por_envio}">
-                                            <span class="text-danger">${contato_por_envio.nome}</span>
+                                            <p><strong>${contato_por_envio.nome}</strong></p>
                                         </c:forEach>
-
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" data-dismiss="modal" class="btn btn-secondary">Fechar</button>
@@ -192,33 +191,40 @@
         <script src="js/front.js"></script> 
         <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>   
         <script>
-                                $(document).ready(function () {
-                                    $('#example').DataTable({
-                                        "language": {
-                                            "sEmptyTable": "Nenhum registro encontrado",
-                                            "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
-                                            "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
-                                            "sInfoFiltered": "(Filtrados de _MAX_ registros)",
-                                            "sInfoPostFix": "",
-                                            "sInfoThousands": ".",
-                                            "sLengthMenu": "_MENU_ resultados por página",
-                                            "sLoadingRecords": "Carregando...",
-                                            "sProcessing": "Processando...",
-                                            "sZeroRecords": "Nenhum registro encontrado",
-                                            "sSearch": "Pesquisar",
-                                            "oPaginate": {
-                                                "sNext": "Próximo",
-                                                "sPrevious": "Anterior",
-                                                "sFirst": "Primeiro",
-                                                "sLast": "último"
-                                            },
-                                            "oAria": {
-                                                "sSortAscending": ": Ordenar colunas de forma ascendente",
-                                                "sSortDescending": ": Ordenar colunas de forma descendente"
-                                            }
-                                        }
-                                    });
-                                });
-        </script>  
+            $(document).ready(function () {
+                $('#example').DataTable({
+                    "language": {
+                        "sEmptyTable": "Nenhum registro encontrado",
+                        "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+                        "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+                        "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+                        "sInfoPostFix": "",
+                        "sInfoThousands": ".",
+                        "sLengthMenu": "_MENU_ resultados por página",
+                        "sLoadingRecords": "Carregando...",
+                        "sProcessing": "Processando...",
+                        "sZeroRecords": "Nenhum registro encontrado",
+                        "sSearch": "Pesquisar",
+                        "oPaginate": {
+                            "sNext": "Próximo",
+                            "sPrevious": "Anterior",
+                            "sFirst": "Primeiro",
+                            "sLast": "último"
+                        },
+                        "oAria": {
+                            "sSortAscending": ": Ordenar colunas de forma ascendente",
+                            "sSortDescending": ": Ordenar colunas de forma descendente"
+                        }
+                    }
+                });
+            });
+        </script>
+        <c:if test="${mostrar}">
+            <script>
+                $(document).ready(function () {
+                   $("#mostrar_modal").modal();
+                });
+            </script>
+        </c:if>
     </body>
 </html>

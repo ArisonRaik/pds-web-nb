@@ -12,6 +12,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import com.maisamo.smartalerta.modelo.fachada.AlertaFacede;
+import com.maisamo.smartalerta.modelo.entidade.Alerta;
+import com.maisamo.smartalerta.modelo.entidade.Usuario;
 
 /**
  *
@@ -19,6 +24,9 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "CadastrarAlerta", urlPatterns = {"/CadastrarAlerta"})
 public class CadastrarAlerta extends HttpServlet {
+
+    private HttpSession sessao = null;
+    private final AlertaFacede af = new AlertaFacede();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,7 +45,7 @@ public class CadastrarAlerta extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet CadastrarAlerta</title>");            
+            out.println("<title>Servlet CadastrarAlerta</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet CadastrarAlerta at " + request.getContextPath() + "</h1>");
@@ -58,7 +66,7 @@ public class CadastrarAlerta extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        verificarSessao(request, response);
     }
 
     /**
@@ -72,7 +80,35 @@ public class CadastrarAlerta extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        verificarSessao(request, response);
+
+        boolean valido = true;
+
+        String titulo = request.getParameter("titulo");
+        String categoria = request.getParameter("categoria");
+        String mensagem = request.getParameter("mensagem");
+
+        if (af.procurar(titulo, "titulo")) {
+            valido = false;
+        }
+
+        if (valido) {
+            Usuario u = (Usuario) sessao.getAttribute("usuario");
+            Alerta a = new Alerta(u);
+            a.setTitulo(titulo);
+            a.setCategoria(categoria);
+            a.setMensagem(mensagem);
+            af.inserir(a);
+        }
+        request.setAttribute("valido", valido);
+        request.getServletContext().getRequestDispatcher("/cadastrar_alerta.jsp").forward(request, response);
+    }
+
+    private void verificarSessao(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        sessao = request.getSession(false);
+        if (sessao == null) {
+            response.sendRedirect("acesso_negado.jsp");
+        }
     }
 
     /**

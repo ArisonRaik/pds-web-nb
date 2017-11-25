@@ -12,6 +12,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import com.maisamo.smartalerta.modelo.fachada.EnvioAlertaFacede;
+import com.maisamo.smartalerta.modelo.entidade.Usuario;
 
 /**
  *
@@ -19,7 +23,10 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "AlertasEnviados", urlPatterns = {"/AlertasEnviados"})
 public class AlertasEnviados extends HttpServlet {
-
+    
+    private HttpSession sessao = null;
+    private final EnvioAlertaFacede eaf = new EnvioAlertaFacede();
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -58,7 +65,11 @@ public class AlertasEnviados extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        verificarSessao(request, response);
+        
+        Usuario u = (Usuario) sessao.getAttribute("usuario");
+        sessao.setAttribute("alertas_enviados", eaf.listar(u));
+	response.sendRedirect("alertas_enviados.jsp");
     }
 
     /**
@@ -72,9 +83,16 @@ public class AlertasEnviados extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        verificarSessao(request, response);
     }
-
+    
+    private void verificarSessao(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        sessao = request.getSession(false);
+        if (sessao == null) {
+            response.sendRedirect("acesso_negado.jsp");
+        }
+    }
+    
     /**
      * Returns a short description of the servlet.
      *

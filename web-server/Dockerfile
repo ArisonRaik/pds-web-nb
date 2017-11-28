@@ -6,6 +6,6 @@ ADD tomcat/tomcat-users.xml $CATALINA_HOME/conf/
 
 # add PostgreSQL JDBC driver jardoc	
 ADD tomcat/postgresql-9.4.1209.jar $CATALINA_HOME/lib/
-ADD ../smartalerta/target/smartalerta-1.0-SNAPSHOT.war $CATALINA_HOME/webapps/
+ADD ../smartalerta/dist/smartalerta.war $CATALINA_HOME/webapps/smartalerta/
 
 CMD ["catalina.sh","run"]

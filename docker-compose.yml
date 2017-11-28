@@ -9,7 +9,7 @@ services:
       - "8084:8081"
       - "5432:5432"
     restart: always
-	
+
   nginx:
     depends_on:
       - reverseproxy
@@ -21,7 +21,7 @@ services:
       context: ./web-server
     image: web-server
     volumes:
-      - ./smartalerta/target/smartalerta-1.0-SNAPSHOT.war:/usr/local/tomcat/webapps/smartalerta/
+      - ./smartalerta/dist/smartalerta.war:/usr/local/tomcat/webapps/smartalerta/
     links:
       - app-db
     depends_on:

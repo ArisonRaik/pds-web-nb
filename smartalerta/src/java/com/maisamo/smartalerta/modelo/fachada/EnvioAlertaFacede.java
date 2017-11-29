@@ -9,6 +9,7 @@ import java.util.List;
 
 import com.maisamo.smartalerta.modelo.dao.EnvioAlertaDAO;
 import com.maisamo.smartalerta.modelo.entidade.EnvioAlerta;
+import com.maisamo.smartalerta.modelo.entidade.Alerta;
 import com.maisamo.smartalerta.modelo.entidade.Usuario;
 
 /**
@@ -33,5 +34,9 @@ public class EnvioAlertaFacede {
 
     public EnvioAlerta procurarPorId(Long id) {
         return eadao.procurarPorId(id);
+    }
+    
+    public EnvioAlerta procurarRecente(Alerta alerta) {
+        return eadao.procurarRecente(alerta);
     }
 }

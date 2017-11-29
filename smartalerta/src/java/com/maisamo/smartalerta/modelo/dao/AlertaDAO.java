@@ -225,4 +225,34 @@ public class AlertaDAO {
         }
         return alerta;
     }
+    
+    public Alerta procurarPorId(Long id) {
+        String sql = "SELECT * FROM alerta WHERE id = ?";
+        
+        Alerta alerta = null;
+        
+        try {
+            conexao = ConexaoBanco.abrirConexao();
+            preparador = conexao.prepareStatement(sql);
+            preparador.setLong(1, id);
+
+            rs = preparador.executeQuery();
+
+            if (rs.next()) {
+                alerta = new Alerta();
+                alerta.setId(rs.getLong("id"));
+                alerta.setCategoria(rs.getString("categoria"));
+                alerta.setTitulo(rs.getString("titulo"));
+                alerta.setMensagem(rs.getString("mensagem"));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            ConexaoBanco.fecharResultSet(rs);
+            ConexaoBanco.fecharInstrucao(preparador);
+            ConexaoBanco.fecharConexao(conexao);
+        }
+        return alerta;
+    }
 }

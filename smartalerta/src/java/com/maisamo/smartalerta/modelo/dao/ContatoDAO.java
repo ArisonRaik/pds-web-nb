@@ -157,6 +157,7 @@ public class ContatoDAO {
 
             if (rs.next()) {
                 contato =  new Contato();
+                contato.setId(rs.getLong("id"));
                 contato.setNome(rs.getString("nome"));
                 contato.setEmail(rs.getString("email"));
                 contato.setFone(rs.getString("fone"));

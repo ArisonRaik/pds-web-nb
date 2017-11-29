@@ -50,4 +50,8 @@ public class AlertaFacede {
     public Alerta procurarPorTitulo(String titulo, Usuario usuario) {
         return adao.procurarPorTitulo(titulo, usuario);
     }
+    
+    public Alerta procurarPorId(Long id) {
+        return adao.procurarPorId(id);
+    }
 }

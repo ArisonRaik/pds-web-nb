@@ -41,11 +41,15 @@ public class EnvioAlerta {
     public LocalTime getHoraEnvio() {
         return datahora_envio.toLocalTime();
     }
-
+    
     public void setDataHoraEnvio(LocalDateTime datahora_envio) {
         this.datahora_envio = datahora_envio;
     }
-
+    
+    public LocalDateTime getDataHoraEnvio() {
+        return datahora_envio;
+    }
+    
     public Alerta getAlerta() {
         return alerta;
     }

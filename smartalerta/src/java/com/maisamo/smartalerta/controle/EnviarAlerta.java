@@ -92,8 +92,8 @@ public class EnviarAlerta extends HttpServlet {
         sessao.setAttribute("contatos", cf.listar(u));
         sessao.setAttribute("categorias", af.listarCategorias(u));
         
-        if (request.getParameter("sel_categoria") != null) {
-            String sel_categoria = request.getParameter("sel_categoria");
+        String sel_categoria = request.getParameter("sel_categoria");
+        if (sel_categoria != null) {
             request.setAttribute("sel_categoria", sel_categoria);
             request.setAttribute("titulos", af.listarTitulosPorCategoria(sel_categoria));
         }
@@ -113,48 +113,51 @@ public class EnviarAlerta extends HttpServlet {
             throws ServletException, IOException {
         verificarSessao(request, response);
         
-        Usuario u = (Usuario) sessao.getAttribute("usuario");
-        String[] enviarPara = request.getParameterValues("enviarPara");
-        Alerta a = af.procurarPorTitulo(request.getParameter("sel_titulo"), u);
-        if (a == null) System.out.println(request.getParameter("sel_titulo"));
-        EnvioAlerta ea = new EnvioAlerta(a);
-        ea.setDataHoraEnvio(LocalDateTime.now());
-        if (eaf.inserir(ea)) System.out.println("chegou aki tbm");
-        env = new Enviador();
+        boolean valido = true;
+        String url;
         
-        for (String id: enviarPara) {
-            //Recupera um contato
-            Contato c = cf.procurarPorId(Long.parseLong(id));
-            System.out.println("chegou aki tbm²");
-            //Registro de contatos que receberam este alerta 
-            EnvioAlertaContato eac = new EnvioAlertaContato(c, ea);
-            eacf.inserir(eac);
+        Usuario u = (Usuario) sessao.getAttribute("usuario");
+        String[] enviarParaId = request.getParameterValues("enviarPara");
+        Alerta a = af.procurarPorTitulo(request.getParameter("sel_titulo"), u);
+        
+        if (enviarParaId == null) {    
+            valido = false;
+        } else {
+            System.out.println(enviarParaId.length);
             
-            //Cria uma página por contato
-            pag = new Pagina(a, u, c);
+            EnvioAlerta ea = new EnvioAlerta(a);
+            ea.setDataHoraEnvio(LocalDateTime.now());
+            eaf.inserir(ea);
+            ea = eaf.procurarRecente(a);
             
-            //De quem?
-            env.setNomeFrom(u.getNome());
-            env.setEmailFrom(u.getEmail());
+            env = new Enviador(u, a);
             
-            //Para quem?
-            env.setNomeTo(c.getNome());
-            env.setEmailTo(c.getEmail());
-            //env.setFoneTo(c.getFone());
-            
-            //O que?
-            env.setAssunto(a.getCategoria());
-            env.setTitulo(a.getTitulo());
-            env.setMensagem(a.getMensagem());
-            
-            //Link para acessar a página
-            env.setUrl(pag.getUrl());
-            System.out.println("chegou aki tbm³");
-            //Envia o email
-            env.enviarEmail();
+            for (String id: enviarParaId) {
+                //Recupera um contato
+                Contato c = cf.procurarPorId(Long.parseLong(id));
+
+                //Registro de contatos que receberam este alerta 
+                EnvioAlertaContato eac = new EnvioAlertaContato(c, ea);
+                eacf.inserir(eac);
+
+                //Cria uma página por contato
+                pag = new Pagina(a, u, c);
+                pf.inserir(pag);
+
+                //Para quem?
+                env.setContato(c);
+
+                //Link para acessar a página
+                url = request.getRemoteAddr() + ":" + request.getLocalPort() + "" + pag.getUrl();
+                System.out.println(url);
+                env.setUrl(url);
+
+                //Envia o email
+                env.enviarEmail();
+            }
         }
         
-        request.setAttribute("valido", true);
+        request.setAttribute("valido", valido);
         request.getServletContext().getRequestDispatcher("/enviar_alerta.jsp").forward(request, response);
     }
 

@@ -15,10 +15,6 @@
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.bitlyj-2.0.0.jar}</file>
-                    <path-in-war>WEB-INF/lib</path-in-war>
-                </library>
-                <library dirs="200">
                     <file>${file.reference.commons-email-1.5.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>

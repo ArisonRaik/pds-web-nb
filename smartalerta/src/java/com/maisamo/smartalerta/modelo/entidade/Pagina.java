@@ -5,14 +5,9 @@
  */
 package com.maisamo.smartalerta.modelo.entidade;
 
-import com.maisamo.smartalerta.controle.AcessarPagina;
 import java.time.LocalDateTime;
 import java.time.LocalDate;
 import java.time.LocalTime;
-
-import com.maisamo.smartalerta.modelo.servico.Seguranca;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -21,7 +16,7 @@ import java.util.logging.Logger;
 public class Pagina {
 
     private Long id;
-    private StringBuffer url, params;
+    private final StringBuffer url, params;
     private LocalDateTime datahora_expira;
     private final Alerta alerta;
     private final Usuario usuario;
@@ -32,25 +27,23 @@ public class Pagina {
         this.usuario = usuario;
         this.contato = contato;
         datahora_expira = LocalDateTime.now().plusHours(24);
+        url = new StringBuffer();
+        params = new StringBuffer();
     }
-
+    
     public String getUrl() {
-        url.append("localhost:8084/smartalerta/AcessarPagina?");
-        try {
-            url.append(getParams());
-        } catch (Exception ex) {
-            Logger.getLogger(AcessarPagina.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        url.append("/smartalerta/AcessarPagina?");
+        url.append(getParams());
         return url.toString();
     }
 
-    private String getParams() throws Exception {
-        params.append("frm=").append(Seguranca.paraRSA(usuario.getNome()));
-        params.append("&par=").append(Seguranca.paraRSA(contato.getNome()));
-        params.append("&cat=").append(Seguranca.paraRSA(alerta.getTitulo()));
-        params.append("&tit=").append(Seguranca.paraRSA(alerta.getCategoria()));
-        params.append("&msg=").append(Seguranca.paraRSA(alerta.getMensagem()));
-        return params.toString();
+    private String getParams() {
+        params.append("frm=").append(usuario.getNome());
+        params.append("&par=").append(contato.getNome());
+        params.append("&cat=").append(alerta.getCategoria());
+        params.append("&tit=").append(alerta.getTitulo());
+        params.append("&msg=").append(alerta.getId());
+        return params.toString().replaceAll(" ", "+");
     }
 
     public void setId(Long id) {

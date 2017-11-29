@@ -16,12 +16,10 @@ import javax.servlet.http.HttpSession;
 
 import java.time.LocalDateTime;
 
+import com.maisamo.smartalerta.modelo.fachada.AlertaFacede;
 import com.maisamo.smartalerta.modelo.fachada.AcessoPaginaFacede;
 import com.maisamo.smartalerta.modelo.entidade.AcessoPagina;
-import com.maisamo.smartalerta.modelo.servico.Seguranca;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
+import com.maisamo.smartalerta.modelo.entidade.Alerta;
 /**
  *
  * @author wagner
@@ -30,6 +28,7 @@ import java.util.logging.Logger;
 public class AcessarPagina extends HttpServlet {
 
     private HttpSession sessao = null;
+    private final AlertaFacede af = new AlertaFacede();
     private final AcessoPaginaFacede apf = new AcessoPaginaFacede();
 
     /**
@@ -75,17 +74,16 @@ public class AcessarPagina extends HttpServlet {
         apf.inserir(acesso_pagina);
 
         sessao = request.getSession(true);
-        try {
-            sessao.setAttribute("from", Seguranca.deRSA(request.getParameter("frm")));
-            sessao.setAttribute("to", Seguranca.deRSA(request.getParameter("par")));
-            sessao.setAttribute("categoria", Seguranca.deRSA(request.getParameter("cat")));
-            sessao.setAttribute("titulo", Seguranca.deRSA(request.getParameter("tit")));
-            sessao.setAttribute("mensagem", Seguranca.deRSA(request.getParameter("msg")));
-
-            response.sendRedirect("acesso_pagina.jsp");
-        } catch (Exception ex) {
-            Logger.getLogger(AcessarPagina.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        sessao.setAttribute("from", request.getParameter("frm").replaceAll("+", " "));
+        sessao.setAttribute("to", request.getParameter("par").replaceAll("+", " "));
+        
+        Long aid = Long.parseLong(request.getParameter("aid"));
+        Alerta alerta = af.procurarPorId(aid);
+        sessao.setAttribute("categoria", alerta.getCategoria());
+        sessao.setAttribute("titulo", alerta.getTitulo());
+        sessao.setAttribute("mensagem", alerta.getMensagem());
+        
+        response.sendRedirect("acesso_pagina.jsp");
     }
 
     /**

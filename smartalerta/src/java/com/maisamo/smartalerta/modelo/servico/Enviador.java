@@ -8,9 +8,9 @@ package com.maisamo.smartalerta.modelo.servico;
 import org.apache.commons.mail.HtmlEmail;
 import org.apache.commons.mail.EmailException;
 
-import com.rosaloves.bitlyj.BitlyException;
-import com.rosaloves.bitlyj.Url;
-import static com.rosaloves.bitlyj.Bitly.*;
+import com.maisamo.smartalerta.modelo.entidade.Usuario;
+import com.maisamo.smartalerta.modelo.entidade.Contato;
+import com.maisamo.smartalerta.modelo.entidade.Alerta;
 
 /**
  *
@@ -19,55 +19,32 @@ import static com.rosaloves.bitlyj.Bitly.*;
 public class Enviador {
 
     private HtmlEmail email;
-    private String emailFrom, emailTo, foneTo;
-    private String nomeFrom, nomeTo;
-    private String titulo, assunto, mensagem;
+    private final Usuario usuario;
+    private Contato contato;
+    private final Alerta alerta;
+    private final String emailFrom, nomeFrom;
+    private String emailTo, foneTo, nomeTo;
+    private final String titulo, assunto;
     private String url;
-
-    public void setNomeFrom(String nomeFrom) {
-        this.nomeFrom = nomeFrom;
+    
+    public Enviador(Usuario usuario, Alerta alerta) {
+        this.usuario = usuario;
+        emailFrom = usuario.getEmail();
+        nomeFrom = usuario.getNome();
+        this.alerta = alerta;
+        titulo = alerta.getTitulo();
+        assunto = alerta.getCategoria();
     }
-
-    public void setEmailFrom(String emailFrom) {
-        this.emailFrom = emailFrom;
-    }
-
-    public void setNomeTo(String nomeTo) {
-        this.nomeTo = nomeTo;
-    }
-
-    public void setEmailTo(String emailTo) {
-        this.emailTo = emailTo;
-    }
-
-    public void setFoneTo(String foneTo) {
-        this.foneTo = foneTo;
-    }
-
-    public void setAssunto(String assunto) {
-        this.assunto = assunto;
-    }
-
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
-    }
-
-    public void setMensagem(String mensagem) {
-        this.mensagem = mensagem;
+    
+    public void setContato(Contato contato) {
+        this.contato = contato;
+        nomeTo = contato.getNome();
+        emailTo = contato.getEmail();
+        foneTo = contato.getFone();
     }
 
     public void setUrl(String url) {
         this.url = url;
-    }
-
-    private String getShortenUrl(String stringUrl) {
-        try {
-            Url url = as("o_61grjdi3ec", "R_3fa7772aeccc4568bcadc58732341560").call(shorten(stringUrl));
-            return url.getShortUrl();
-        } catch (BitlyException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     public void enviarEmail() {
@@ -77,18 +54,19 @@ public class Enviador {
             email.setAuthentication("thiagotierre.lima@gmail.com", "thiago.tierre.de.lima@141090");
             email.addTo(emailTo); // destinatario
             email.setFrom(emailFrom, nomeFrom); // remetente
-            email.setSubject(titulo + " - " + assunto); // assunto do e-mail
+            email.setSubject(assunto + " - " + titulo); // assunto do e-mail
             
             /* conteudo do e-mail */
             email.setHtmlMsg("<html>"
                     + "     <head>"
+                    + "         <meta charset=\"utf-8\">"
                     + "         <style>"
                     + "             h3{ margin-bottom: 25px }"
                     + "             h1{ text-align: center }"
                     + "             p, a{ font-size: 20px }"
                     + "             .body{"
-                    + "                 width: 50%;"
-                    + "                 margin: 0 25% 2.5% 25%;"
+                    + "                 width: 65%;"
+                    + "                 margin: 1.5% 17.5% 1.5% 17.5%;"
                     + "			border: 1px solid #c3c3c3;"
                     + "			background-color: #F4F7FA;"
                     + "			text-align: justify;"
@@ -102,7 +80,7 @@ public class Enviador {
                     + "             h1{ text-align: center }"
                     + "             .msgBody{"
                     + "			margin-top: 5px;"
-                    + "			text-align: justify;"
+                    + "			text-align: center;"
                     + "                 border: 1px solid #c3c3c3;"
                     + "			padding: 15px;"
                     + "			margin: 20px"
@@ -124,12 +102,10 @@ public class Enviador {
                     + "				</p>"
                     + "			</div>"
                     + "			<div class=\"msgBody\">"
-                    + "				<h1>Título do alerta</h1>"
+                    + "				<h1>" + titulo + "</h1>"
                     + "				<hr>"
-                    +                           mensagem
-                    + "				<p>"
-                    + "					Para mais detalhes, clique sobre o link a seguir. <a href=\"" + url + "\">http://bit.ly/2j3oS9G</a>"
-                    + "				</p>"
+                    + "				<p>Para mais detalhes, clique sobre o link a seguir.</p>"
+                    + "                         <p><a href=\"" + url + "\">smrtal.rt/cHBm21</a></p>"
                     + "			</div>"
                     + "		</div>"
                     + "     </body>"
@@ -140,7 +116,6 @@ public class Enviador {
                     + "Esta mensagem foi enviada por " + nomeFrom
                     + "para avisá-lo de que você tem algo importante sobre um(a) "
                     + assunto + " da qual deve se lembrar.\n"
-                    + mensagem
                     + "\nPara mais detalhes, acesse o link a seguir.\n" + url);
             
             email.setSSLOnConnect(true);

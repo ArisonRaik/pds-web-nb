@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.maisamo.smartalerta.modelo.fachada.EnvioAlertaFacede;
+import com.maisamo.smartalerta.modelo.fachada.EnvioAlertaContatoFacede;
+import com.maisamo.smartalerta.modelo.entidade.EnvioAlerta;
 import com.maisamo.smartalerta.modelo.entidade.Usuario;
 
 /**
@@ -26,6 +28,7 @@ public class AlertasEnviados extends HttpServlet {
     
     private HttpSession sessao = null;
     private final EnvioAlertaFacede eaf = new EnvioAlertaFacede();
+    private final EnvioAlertaContatoFacede eacf = new EnvioAlertaContatoFacede();
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -69,7 +72,16 @@ public class AlertasEnviados extends HttpServlet {
         
         Usuario u = (Usuario) sessao.getAttribute("usuario");
         sessao.setAttribute("alertas_enviados", eaf.listar(u));
-	response.sendRedirect("alertas_enviados.jsp");
+        
+        String eaid = request.getParameter("eaid");
+        if (eaid != null) {
+            System.out.println("entrou no if");
+            EnvioAlerta ea = eaf.procurarPorId(Long.parseLong(eaid));
+
+            request.setAttribute("contatos_por_envio", eacf.listar(ea));
+            request.setAttribute("mostrar", true);
+        }
+        request.getServletContext().getRequestDispatcher("/alertas_enviados.jsp").forward(request, response);
     }
 
     /**

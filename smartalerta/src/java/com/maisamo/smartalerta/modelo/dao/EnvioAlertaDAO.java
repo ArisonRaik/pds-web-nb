@@ -89,6 +89,7 @@ public class EnvioAlertaDAO {
                 alerta.setTitulo(rs.getString("titulo"));
                 alerta.setCategoria(rs.getString("categoria"));
                 EnvioAlerta envio_alerta = new EnvioAlerta(alerta);
+                envio_alerta.setId(rs.getLong(1));
                 envio_alerta.setDataHoraEnvio(
                         LocalDateTime.of(
                                 rs.getDate("data_envio").toLocalDate(),
@@ -117,6 +118,37 @@ public class EnvioAlertaDAO {
             conexao = ConexaoBanco.abrirConexao();
             preparador = conexao.prepareStatement(sql);
             preparador.setLong(1, id);
+            
+            rs = preparador.executeQuery();
+
+            if (rs.next()) {
+                envio_alerta = new EnvioAlerta();
+                envio_alerta.setId(rs.getLong("id"));
+                envio_alerta.setDataHoraEnvio(
+                        LocalDateTime.of(
+                                rs.getDate("data_envio").toLocalDate(),
+                                rs.getTime("hora_envio").toLocalTime()
+                        )
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            ConexaoBanco.fecharInstrucao(preparador);
+            ConexaoBanco.fecharConexao(conexao);
+        }
+        return envio_alerta;
+    }
+    
+    public EnvioAlerta procurarRecente(Alerta alerta) {
+        String sql = "SELECT * FROM envio_alerta WHERE alerta_id = ? ORDER BY id DESC LIMIT 1";
+
+        EnvioAlerta envio_alerta = null;
+
+        try {
+            conexao = ConexaoBanco.abrirConexao();
+            preparador = conexao.prepareStatement(sql);
+            preparador.setLong(1, alerta.getId());
             
             rs = preparador.executeQuery();
 

@@ -14,6 +14,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
     <head>
+        <meta charset="utf-8">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title>[Enviar Alerta] Smart Alerta!</title>
@@ -122,7 +123,7 @@
                                                         <div class="line"></div>
                                                         <div class="form-group">
                                                             <label>Categoria</label>                  
-                                                            <select name="sel_categoria" class="form-control" onchange="this.form.submit()">
+                                                            <select name="sel_categoria" class="form-control" onchange="this.form.submit()" required>
                                                                 <option>${sel_categoria}</option>
                                                                 <c:forEach var="categoria" items="${categorias}">
                                                                     <option value="${categoria}">${categoria}</option>
@@ -141,7 +142,7 @@
                                                     <div class="card-body">
                                                         <div class="form-group">       
                                                             <label>Título</label>
-                                                            <select name="sel_titulo" class="form-control">
+                                                            <select name="sel_titulo" class="form-control" required>
                                                                 <option></option>
                                                                 <c:forEach var="titulo" items="${titulos}">
                                                                     <option value="${titulo}">${titulo}</option>
@@ -211,6 +212,28 @@
                             <h3 id="exampleModalLabel" class="modal-title"><strong class="text-success">Alerta Enviado!</strong></h3>
                             <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">&times;</span></button>
                         </div>
+                        <div class="modal-body">
+                            <p><strong class="text-success">O alerta foi enviado com sucesso!</strong></p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" data-dismiss="modal" class="btn btn-secondary">OK!</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- não enviado Modal-->
+            <div id="invalido_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-center">
+                <div role="document" class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3 id="exampleModalLabel" class="modal-title"><strong class="text-danger">Ops!</strong></h3>
+                            <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">&times;</span></button>
+                        </div>
+                        <div class="modal-body">
+                            <p><strong class="text-danger">O alerta não pôde ser enviado.</strong></p>
+                            <p><strong class="text-danger">Motivo: Nenhum <b class="text-primary">contato</b> foi selecionado para receber o alerta.</strong></p>
+                        </div>
                         <div class="modal-footer">
                             <button type="button" data-dismiss="modal" class="btn btn-secondary">OK!</button>
                         </div>
@@ -271,12 +294,21 @@
                 });
             });
         </script>    
-        <c:if test="${valido}">
-            <script>
-                $(document).ready(function () {
-                    $("#valido_modal").modal();
-                });
-            </script>
-        </c:if>
+        <c:choose>
+            <c:when test="${valido}">
+                <script>
+                    $(document).ready(function () {
+                        $("#valido_modal").modal();
+                    });
+                </script>
+            </c:when>
+            <c:when test="${valido == false}">
+                <script>
+                    $(document).ready(function () {
+                        $("#invalido_modal").modal();
+                    });
+                </script>
+            </c:when>
+        </c:choose>
     </body>
 </html>

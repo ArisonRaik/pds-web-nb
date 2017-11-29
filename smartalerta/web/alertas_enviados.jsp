@@ -6,6 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
 <c:if test="${empty sessionScope.usuario}">
     <c:redirect url="/acesso_negado.jsp" context="/smartalerta"/>
@@ -117,7 +118,6 @@
                                                 <th>Categoria (Alerta)</th>
                                                 <th>Título (Alerta)</th>
                                                 <th>Contatos</th>
-                                                <th>Excluir</th>
                                             </tr>
                                         </thead>
                                         <tfoot>
@@ -126,17 +126,15 @@
                                                 <th>Categoria (Alerta)</th>
                                                 <th>Título (Alerta)</th>
                                                 <th>Contatos</th>
-                                                <th>Excluir</th>
                                             </tr>
                                         </tfoot>
                                         <tbody>
                                             <c:forEach var="alerta_enviado" items="${sessionScope.alertas_enviados}">
                                                 <tr>
-                                                    <td>${alerta_enviado.datahora_envio}</td>
+                                                    <td>${alerta_enviado.getDataHoraEnvio()}</td>
                                                     <td>${alerta_enviado.alerta.categoria}</td>
                                                     <td>${alerta_enviado.alerta.titulo}</td>
-                                                    <td><button type="button" onclick="window.location.href = 'VerContatosPorEnvio?eaid=${alerta_enviado.id}'" class="btn btn-outline-info">Contatos</button></td>
-                                                    <td><button type="button" class="btn btn-outline-danger">Excluir</button></td>
+                                                    <td><button type="button" onclick="window.location.href='AlertasEnviados?eaid=${alerta_enviado.id}'" class="btn btn-outline-info">Contatos</button></td>
                                                 </tr>
                                             </c:forEach>
                                         </tbody>
@@ -153,7 +151,7 @@
                                         <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">&times;</span></button>
                                     </div>
                                     <div class="modal-body">
-                                        <c:forEach var="contato_por_envio" items="${sessionScope.contatos_por_envio}">
+                                        <c:forEach var="contato_por_envio" items="${contatos_por_envio}">
                                             <p><strong>${contato_por_envio.nome}</strong></p>
                                         </c:forEach>
                                     </div>

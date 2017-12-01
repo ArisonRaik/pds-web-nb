@@ -29,4 +29,8 @@ public class PaginaFacede {
     public List<Pagina> listar() {
         return pdao.listar();
     }
+    
+    public Pagina procurarPorId(Long id) {
+        return pdao.procurarPorId(id);
+    }
 }

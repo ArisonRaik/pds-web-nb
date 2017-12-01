@@ -23,10 +23,6 @@ public class AcessoPaginaFacede {
         return apdao.inserir(acesso_pagina);
     }
 
-    public boolean atualizar(AcessoPagina acesso_pagina) {
-        return apdao.atualizar(acesso_pagina);
-    }
-
     public boolean excluir(AcessoPagina acesso_pagina) {
         return apdao.excluir(acesso_pagina);
     }

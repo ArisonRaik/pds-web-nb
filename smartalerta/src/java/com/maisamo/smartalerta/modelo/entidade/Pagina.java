@@ -9,6 +9,8 @@ import java.time.LocalDateTime;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import com.maisamo.smartalerta.modelo.servico.Seguranca;
+        
 /**
  *
  * @author wagner
@@ -16,36 +18,25 @@ import java.time.LocalTime;
 public class Pagina {
 
     private Long id;
-    private final StringBuffer url, params;
+    private String url;
     private LocalDateTime datahora_expira;
     private final Alerta alerta;
     private final Usuario usuario;
     private final Contato contato;
-
+    
     public Pagina(Alerta alerta, Usuario usuario, Contato contato) {
         this.alerta = alerta;
         this.usuario = usuario;
         this.contato = contato;
         datahora_expira = LocalDateTime.now().plusHours(24);
-        url = new StringBuffer();
-        params = new StringBuffer();
     }
     
     public String getUrl() {
-        url.append("/smartalerta/AcessarPagina?");
-        url.append(getParams());
-        return url.toString();
+        String token = Seguranca.paraB64(id.toString());
+        url = "/smartalerta/AcessarPagina?token=" + token;
+        return url;
     }
-
-    private String getParams() {
-        params.append("frm=").append(usuario.getNome());
-        params.append("&par=").append(contato.getNome());
-        params.append("&cat=").append(alerta.getCategoria());
-        params.append("&tit=").append(alerta.getTitulo());
-        params.append("&msg=").append(alerta.getId());
-        return params.toString().replaceAll(" ", "+");
-    }
-
+    
     public void setId(Long id) {
         this.id = id;
     }

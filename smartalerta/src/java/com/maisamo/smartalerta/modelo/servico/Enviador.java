@@ -46,7 +46,7 @@ public class Enviador {
     public void setUrl(String url) {
         this.url = url;
     }
-
+    
     public void enviarEmail() {
         email = new HtmlEmail();
         try {
@@ -105,7 +105,7 @@ public class Enviador {
                     + "				<h1>" + titulo + "</h1>"
                     + "				<hr>"
                     + "				<p>Para mais detalhes, clique sobre o link a seguir.</p>"
-                    + "                         <p><a href=\"" + url + "\">smrtal.rt/cHBm21</a></p>"
+                    + "                         <p><a href=\"http://" + url + "\">smal.rt/AuHk21</a></p>"
                     + "			</div>"
                     + "		</div>"
                     + "     </body>"

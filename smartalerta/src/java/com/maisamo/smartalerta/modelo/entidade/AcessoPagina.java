@@ -17,10 +17,7 @@ public class AcessoPagina {
 
     private Long id;
     private LocalDateTime datahora_acesso;
-    private Pagina pagina;
-
-    public AcessoPagina() {
-    }
+    private final Pagina pagina;
 
     public AcessoPagina(Pagina pagina) {
         this.pagina = pagina;

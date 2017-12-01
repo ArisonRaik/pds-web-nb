@@ -6,6 +6,7 @@
 package com.maisamo.smartalerta.controle;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,10 +17,12 @@ import javax.servlet.http.HttpSession;
 
 import java.time.LocalDateTime;
 
-import com.maisamo.smartalerta.modelo.fachada.AlertaFacede;
+import com.maisamo.smartalerta.modelo.servico.Seguranca;
+import com.maisamo.smartalerta.modelo.fachada.PaginaFacede;
 import com.maisamo.smartalerta.modelo.fachada.AcessoPaginaFacede;
+import com.maisamo.smartalerta.modelo.entidade.Pagina;
 import com.maisamo.smartalerta.modelo.entidade.AcessoPagina;
-import com.maisamo.smartalerta.modelo.entidade.Alerta;
+
 /**
  *
  * @author wagner
@@ -28,7 +31,7 @@ import com.maisamo.smartalerta.modelo.entidade.Alerta;
 public class AcessarPagina extends HttpServlet {
 
     private HttpSession sessao = null;
-    private final AlertaFacede af = new AlertaFacede();
+    private final PaginaFacede pf = new PaginaFacede();
     private final AcessoPaginaFacede apf = new AcessoPaginaFacede();
 
     /**
@@ -69,19 +72,24 @@ public class AcessarPagina extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        AcessoPagina acesso_pagina = new AcessoPagina();
+        String pid = null;
+        try {
+            pid = Seguranca.deB64(request.getParameter("token"));
+        } catch (UnsupportedEncodingException ex) {
+            ex.getStackTrace();
+        }
+        
+        Pagina pagina = pf.procurarPorId(Long.parseLong(pid));
+        AcessoPagina acesso_pagina = new AcessoPagina(pagina);
         acesso_pagina.setDataHoraAcesso(LocalDateTime.now());
         apf.inserir(acesso_pagina);
 
         sessao = request.getSession(true);
-        sessao.setAttribute("from", request.getParameter("frm").replaceAll("+", " "));
-        sessao.setAttribute("to", request.getParameter("par").replaceAll("+", " "));
-        
-        Long aid = Long.parseLong(request.getParameter("aid"));
-        Alerta alerta = af.procurarPorId(aid);
-        sessao.setAttribute("categoria", alerta.getCategoria());
-        sessao.setAttribute("titulo", alerta.getTitulo());
-        sessao.setAttribute("mensagem", alerta.getMensagem());
+        sessao.setAttribute("from", pagina.getUsuario().getNome());
+        sessao.setAttribute("to", pagina.getContato().getNome());
+        sessao.setAttribute("categoria", pagina.getAlerta().getCategoria());
+        sessao.setAttribute("titulo", pagina.getAlerta().getTitulo());
+        sessao.setAttribute("mensagem", pagina.getAlerta().getMensagem());
         
         response.sendRedirect("acesso_pagina.jsp");
     }

@@ -148,7 +148,7 @@ public class EnviarAlerta extends HttpServlet {
                 env.setContato(c);
 
                 //Link para acessar a página
-                url = request.getRemoteAddr() + ":" + request.getLocalPort() + "" + pag.getUrl();
+                url = request.getServerName() + ":" + request.getServerPort() + "" + pag.getUrl();
                 System.out.println(url);
                 env.setUrl(url);
 

@@ -6,7 +6,6 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
 <c:if test="${empty sessionScope.usuario}">
     <c:redirect url="/acesso_negado.jsp" context="/smartalerta"/>
@@ -151,9 +150,11 @@
                                         <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">&times;</span></button>
                                     </div>
                                     <div class="modal-body">
+                                        <ul>
                                         <c:forEach var="contato_por_envio" items="${contatos_por_envio}">
-                                            <p><strong>${contato_por_envio.nome}</strong></p>
+                                            <li><strong>${contato_por_envio.nome}</strong></li>    
                                         </c:forEach>
+                                        </ul>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" data-dismiss="modal" class="btn btn-secondary">Fechar</button>

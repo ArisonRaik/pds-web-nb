@@ -8,6 +8,8 @@ package com.maisamo.smartalerta.modelo.servico;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
+import java.io.UnsupportedEncodingException;
 
 /**
  *
@@ -23,5 +25,20 @@ public class Seguranca {
         } catch (NoSuchAlgorithmException e) {
         }
         return null;
+    }
+    
+    public static String paraB64(String mensagem) {
+        String b64encoded = null;
+        try {
+            b64encoded = Base64.getUrlEncoder().encodeToString(mensagem.getBytes("utf-8"));
+        } catch (UnsupportedEncodingException ex) {
+            ex.getStackTrace();
+        }
+        return b64encoded;
+    }
+        
+    public static String deB64(String b64encoded) throws UnsupportedEncodingException {
+        byte[] b64decoded = Base64.getUrlDecoder().decode(b64encoded);
+        return new String(b64decoded, "utf-8");
     }
 }

@@ -50,26 +50,6 @@ public class AcessoPaginaDAO {
         return resultado;
     }
 
-    public boolean atualizar(AcessoPagina acesso_pagina) {
-        String sql = "UPDATE acesso_pagina SET data_acesso = ?, hora_acesso = ? where id = ?";
-
-        try {
-            conexao = ConexaoBanco.abrirConexao();
-            preparador = conexao.prepareStatement(sql);
-            preparador.setDate(1, Date.valueOf(acesso_pagina.getDataAcesso()));
-            preparador.setTime(2, Time.valueOf(acesso_pagina.getHoraAcesso()));
-            preparador.setLong(3, acesso_pagina.getId());
-            preparador.execute();
-            resultado = true;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            ConexaoBanco.fecharInstrucao(preparador);
-            ConexaoBanco.fecharConexao(conexao);
-        }
-        return resultado;
-    }
-
     public boolean excluir(AcessoPagina acesso_pagina) {
         String sql = "DELETE FROM acesso_pagina where id = ?";
 

@@ -74,7 +74,14 @@ public class PaginaDAO {
     }
 
     public List<Pagina> listar() {
-        String sql = "SELECT * FROM pagina ORDER BY id";
+        String sql = "SELECT p.id, p.data_expira, p.hora_expira, "
+                    +"u.nome AS unome, c.nome AS cnome, "
+                    +"a.categoria AS acat, a.titulo AS atit, a.mensagem AS amsg "
+                    +"FROM pagina p "
+                    +"JOIN alerta a ON a.id = p.alerta_id "
+                    +"JOIN usuario u ON u.id = p.usuario_id "
+                    +"JOIN contato c ON c.id = p.contato_id "
+                    +"ORDER BY p.id DESC";
 
         List<Pagina> lista = new ArrayList();
 
@@ -86,9 +93,18 @@ public class PaginaDAO {
 
             while (rs.next()) {
                 Usuario usuario = new Usuario();
+                usuario.setNome(rs.getString("unome"));
+                
                 Alerta alerta = new Alerta(usuario);
+                alerta.setCategoria(rs.getString("acat"));
+                alerta.setCategoria(rs.getString("atit"));
+                alerta.setCategoria(rs.getString("amsg"));
+                
                 Contato contato = new Contato(usuario);
+                contato.setNome(rs.getString("cnome"));
+                
                 Pagina pagina = new Pagina(alerta, usuario, contato);
+                pagina.setId(rs.getLong("id"));
                 pagina.setDataHoraExpira(
                         LocalDateTime.of(
                                 rs.getDate("data_expira").toLocalDate(),
@@ -106,5 +122,55 @@ public class PaginaDAO {
             ConexaoBanco.fecharConexao(conexao);
         }
         return lista;
+    }
+    
+    public Pagina procurarPorId(Long id) {
+        String sql = "SELECT p.id, p.data_expira, p.hora_expira, "
+                    +"u.nome AS unome, c.nome AS cnome, "
+                    +"a.categoria AS acat, a.titulo AS atit, a.mensagem AS amsg "
+                    +"FROM pagina p "
+                    +"JOIN alerta a ON a.id = p.alerta_id "
+                    +"JOIN usuario u ON u.id = p.usuario_id "
+                    +"JOIN contato c ON c.id = p.contato_id "
+                    +"WHERE p.id = ?";
+        
+        Pagina pagina = null;
+        
+        try {
+            conexao = ConexaoBanco.abrirConexao();
+            preparador = conexao.prepareStatement(sql);
+            
+            rs = preparador.executeQuery();
+            
+            if (rs.next()) {
+                Usuario usuario = new Usuario();
+                usuario.setNome(rs.getString("unome"));
+                
+                Alerta alerta = new Alerta(usuario);
+                alerta.setCategoria(rs.getString("acat"));
+                alerta.setCategoria(rs.getString("atit"));
+                alerta.setCategoria(rs.getString("amsg"));
+                
+                Contato contato = new Contato(usuario);
+                contato.setNome(rs.getString("cnome"));
+                
+                pagina = new Pagina(alerta, usuario, contato);
+                pagina.setId(rs.getLong("id"));
+                pagina.setDataHoraExpira(
+                        LocalDateTime.of(
+                                rs.getDate("data_expira").toLocalDate(),
+                                rs.getTime("hora_expira").toLocalTime()
+                        )
+                );
+            }
+            
+        } catch (SQLException ex) {
+            ex.getStackTrace();
+        } finally {
+            ConexaoBanco.fecharResultSet(rs);
+            ConexaoBanco.fecharInstrucao(preparador);
+            ConexaoBanco.fecharConexao(conexao);
+        }
+        return pagina;
     }
 }

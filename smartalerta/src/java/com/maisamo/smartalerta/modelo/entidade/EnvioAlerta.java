@@ -8,6 +8,7 @@ package com.maisamo.smartalerta.modelo.entidade;
 import java.time.LocalDateTime;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  *
@@ -46,8 +47,8 @@ public class EnvioAlerta {
         this.datahora_envio = datahora_envio;
     }
     
-    public LocalDateTime getDataHoraEnvio() {
-        return datahora_envio;
+    public String getDataHoraEnvio() {
+        return datahora_envio.format(DateTimeFormatter.ofPattern("dd/MM/uuuu - HH:mm:ss"));
     }
     
     public Alerta getAlerta() {

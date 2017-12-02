@@ -96,9 +96,9 @@ public class PaginaDAO {
                 usuario.setNome(rs.getString("unome"));
                 
                 Alerta alerta = new Alerta(usuario);
+                alerta.setTitulo(rs.getString("atit"));
+                alerta.setMensagem(rs.getString("amsg"));
                 alerta.setCategoria(rs.getString("acat"));
-                alerta.setCategoria(rs.getString("atit"));
-                alerta.setCategoria(rs.getString("amsg"));
                 
                 Contato contato = new Contato(usuario);
                 contato.setNome(rs.getString("cnome"));
@@ -139,6 +139,7 @@ public class PaginaDAO {
         try {
             conexao = ConexaoBanco.abrirConexao();
             preparador = conexao.prepareStatement(sql);
+            preparador.setLong(1, id);
             
             rs = preparador.executeQuery();
             
@@ -147,13 +148,48 @@ public class PaginaDAO {
                 usuario.setNome(rs.getString("unome"));
                 
                 Alerta alerta = new Alerta(usuario);
+                alerta.setTitulo(rs.getString("atit"));
+                alerta.setMensagem(rs.getString("amsg"));
                 alerta.setCategoria(rs.getString("acat"));
-                alerta.setCategoria(rs.getString("atit"));
-                alerta.setCategoria(rs.getString("amsg"));
                 
                 Contato contato = new Contato(usuario);
                 contato.setNome(rs.getString("cnome"));
                 
+                pagina = new Pagina(alerta, usuario, contato);
+                pagina.setId(rs.getLong("id"));
+                pagina.setDataHoraExpira(
+                        LocalDateTime.of(
+                                rs.getDate("data_expira").toLocalDate(),
+                                rs.getTime("hora_expira").toLocalTime()
+                        )
+                );
+            }
+            
+        } catch (SQLException ex) {
+            ex.getStackTrace();
+        } finally {
+            ConexaoBanco.fecharResultSet(rs);
+            ConexaoBanco.fecharInstrucao(preparador);
+            ConexaoBanco.fecharConexao(conexao);
+        }
+        return pagina;
+    }
+    
+    public Pagina procurarRecente(Alerta alerta, Usuario usuario, Contato contato) {
+        String sql = "SELECT * FROM pagina WHERE alerta_id = ? AND usuario_id = ? AND contato_id = ? ORDER BY id DESC LIMIT 1";
+        
+        Pagina pagina = null;
+        
+        try {
+            conexao = ConexaoBanco.abrirConexao();
+            preparador = conexao.prepareStatement(sql);
+            preparador.setLong(1, alerta.getId());
+            preparador.setLong(2, usuario.getId());
+            preparador.setLong(3, contato.getId());
+            
+            rs = preparador.executeQuery();
+            
+            if (rs.next()) {
                 pagina = new Pagina(alerta, usuario, contato);
                 pagina.setId(rs.getLong("id"));
                 pagina.setDataHoraExpira(

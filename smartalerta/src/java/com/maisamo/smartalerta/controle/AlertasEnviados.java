@@ -75,13 +75,13 @@ public class AlertasEnviados extends HttpServlet {
         
         String eaid = request.getParameter("eaid");
         if (eaid != null) {
-            System.out.println("entrou no if");
             EnvioAlerta ea = eaf.procurarPorId(Long.parseLong(eaid));
-
+            
             request.setAttribute("contatos_por_envio", eacf.listar(ea));
-            request.setAttribute("mostrar", true);
+            request.getServletContext().getRequestDispatcher("/contatos_por_envio.jsp").forward(request, response);
+        } else {
+            response.sendRedirect("alertas_enviados.jsp");
         }
-        request.getServletContext().getRequestDispatcher("/alertas_enviados.jsp").forward(request, response);
     }
 
     /**

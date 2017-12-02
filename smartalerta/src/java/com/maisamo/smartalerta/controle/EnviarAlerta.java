@@ -16,12 +16,12 @@ import javax.servlet.http.HttpSession;
 
 import java.time.LocalDateTime;
 
+import com.maisamo.smartalerta.modelo.servico.Seguranca;
 import com.maisamo.smartalerta.modelo.fachada.AlertaFacede;
 import com.maisamo.smartalerta.modelo.fachada.ContatoFacede;
 import com.maisamo.smartalerta.modelo.fachada.PaginaFacede;
 import com.maisamo.smartalerta.modelo.fachada.EnvioAlertaFacede;
 import com.maisamo.smartalerta.modelo.fachada.EnvioAlertaContatoFacede;
-
 import com.maisamo.smartalerta.modelo.entidade.Usuario;
 import com.maisamo.smartalerta.modelo.entidade.Alerta;
 import com.maisamo.smartalerta.modelo.entidade.Contato;
@@ -143,13 +143,14 @@ public class EnviarAlerta extends HttpServlet {
                 //Cria uma página por contato
                 pag = new Pagina(a, u, c);
                 pf.inserir(pag);
+                pag = pf.procurarRecente(a, u, c);
 
                 //Para quem?
                 env.setContato(c);
 
                 //Link para acessar a página
-                url = request.getServerName() + ":" + request.getServerPort() + "" + pag.getUrl();
-                System.out.println(url);
+                String token = Seguranca.paraB64(pag.getId().toString());
+                url = request.getServerName() + ":" + request.getServerPort() + pag.getUrl() + token;
                 env.setUrl(url);
 
                 //Envia o email

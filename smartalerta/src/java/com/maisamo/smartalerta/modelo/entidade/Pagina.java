@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 import com.maisamo.smartalerta.modelo.servico.Seguranca;
+import java.io.UnsupportedEncodingException;
         
 /**
  *
@@ -32,8 +33,7 @@ public class Pagina {
     }
     
     public String getUrl() {
-        String token = Seguranca.paraB64(id.toString());
-        url = "/smartalerta/AcessarPagina?token=" + token;
+        url = "/smartalerta/AcessarPagina?token=";
         return url;
     }
     

@@ -211,9 +211,9 @@ public class AlertaDAO {
             if (rs.next()) {
                 alerta = new Alerta();
                 alerta.setId(rs.getLong("id"));
-                alerta.setCategoria(rs.getString("categoria"));
                 alerta.setTitulo(rs.getString("titulo"));
                 alerta.setMensagem(rs.getString("mensagem"));
+                alerta.setCategoria(rs.getString("categoria"));
             }
 
         } catch (SQLException e) {
@@ -241,9 +241,9 @@ public class AlertaDAO {
             if (rs.next()) {
                 alerta = new Alerta();
                 alerta.setId(rs.getLong("id"));
-                alerta.setCategoria(rs.getString("categoria"));
                 alerta.setTitulo(rs.getString("titulo"));
                 alerta.setMensagem(rs.getString("mensagem"));
+                alerta.setCategoria(rs.getString("categoria"));
             }
 
         } catch (SQLException e) {

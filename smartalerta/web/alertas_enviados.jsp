@@ -14,6 +14,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
     <head>
+        <meta charset="utf-8">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title>[Alertas Enviados] Smart Alerta!</title>
@@ -53,7 +54,7 @@
                     <div class="sidenav-header-inner text-center"><img src="img/avatar-1.jpg" alt="person" class="img-fluid rounded-circle">
                         <h2 class="h5 text-uppercase">${sessionScope.usuario.nome}</h2>
                     </div>
-                    <div class="sidenav-header-logo"><a href="index.html" class="brand-small text-center"> <strong>S</strong><strong class="text-primary">A</strong></a></div>
+                    <div class="sidenav-header-logo"><a href="#" class="brand-small text-center"> <strong>S</strong><strong class="text-primary">A</strong></a></div>
                 </div>
                 <div class="main-menu">
                     <ul id="side-main-menu" class="side-menu list-unstyled">                  
@@ -113,7 +114,7 @@
                                     <table id="example" class="display" cellspacing="0" width="100%">
                                         <thead>
                                             <tr>
-                                                <th>Data de Envio</th>
+                                                <th>Data / Hora de Envio</th>
                                                 <th>Categoria (Alerta)</th>
                                                 <th>Título (Alerta)</th>
                                                 <th>Contatos</th>
@@ -121,7 +122,7 @@
                                         </thead>
                                         <tfoot>
                                             <tr>
-                                                <th>Data de Envio</th>
+                                                <th>Data / Hora de Envio</th>
                                                 <th>Categoria (Alerta)</th>
                                                 <th>Título (Alerta)</th>
                                                 <th>Contatos</th>
@@ -140,28 +141,7 @@
                                     </table>
                                 </div>
                             </div>
-                        </div>
-
-                        <!-- mostrar Modal-->
-                        <div id="mostrar_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-center">
-                            <div role="document" class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">&times;</span></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <ul>
-                                        <c:forEach var="contato_por_envio" items="${contatos_por_envio}">
-                                            <li><strong>${contato_por_envio.nome}</strong></li>    
-                                        </c:forEach>
-                                        </ul>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" data-dismiss="modal" class="btn btn-secondary">Fechar</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>        
+                        </div>     
                     </div>
                 </div>
             </section>
@@ -179,6 +159,7 @@
                 </div>
             </footer>
         </div>
+        
         <!-- Javascript files-->
         <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"></script>
@@ -218,12 +199,5 @@
                 });
             });
         </script>
-        <c:if test="${mostrar}">
-            <script>
-                $(document).ready(function () {
-                   $("#mostrar_modal").modal();
-                });
-            </script>
-        </c:if>
     </body>
 </html>

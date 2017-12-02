@@ -47,7 +47,7 @@
             <link rel="stylesheet" type="text/css" href="framework/demo-framework.css" />
             <script src="https://code.angularjs.org/1.2.9/angular.js"></script>
             <script src="js/angular-drag-and-drop-lists.js"></script> -->
-        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">   
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
     </head>
     <body>
         <!-- Side Navbar -->
@@ -119,7 +119,7 @@
                                             <div class="col-lg-12">
                                                 <div class="card">
                                                     <div class="card-body">
-                                                        <h2 class="h5 display"><strong class="text-primary">Quem deve receber este alerta?</strong></h2>
+                                                        <h2 class="h5 display"><strong class="text-primary">Qual alerta deve ser enviado?</strong></h2>
                                                         <div class="line"></div>
                                                         <div class="form-group">
                                                             <label>Categoria</label>                  

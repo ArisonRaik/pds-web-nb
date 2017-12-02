@@ -37,8 +37,14 @@ public class Seguranca {
         return b64encoded;
     }
         
-    public static String deB64(String b64encoded) throws UnsupportedEncodingException {
-        byte[] b64decoded = Base64.getUrlDecoder().decode(b64encoded);
-        return new String(b64decoded, "utf-8");
+    public static String deB64(String b64encoded) {
+        String decoded = null;
+        try {
+            byte[] b64decoded = Base64.getUrlDecoder().decode(b64encoded);
+            decoded = new String(b64decoded, "utf-8");
+        } catch (UnsupportedEncodingException ex) {
+            ex.getStackTrace();
+        }
+        return decoded;
     }
 }

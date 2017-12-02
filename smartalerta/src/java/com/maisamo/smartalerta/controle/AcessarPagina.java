@@ -6,7 +6,6 @@
 package com.maisamo.smartalerta.controle;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -72,21 +71,17 @@ public class AcessarPagina extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String pid = null;
-        try {
-            pid = Seguranca.deB64(request.getParameter("token"));
-        } catch (UnsupportedEncodingException ex) {
-            ex.getStackTrace();
-        }
+        String pid = Seguranca.deB64(request.getParameter("token"));
         
         Pagina pagina = pf.procurarPorId(Long.parseLong(pid));
         AcessoPagina acesso_pagina = new AcessoPagina(pagina);
         acesso_pagina.setDataHoraAcesso(LocalDateTime.now());
         apf.inserir(acesso_pagina);
-
+        
         sessao = request.getSession(true);
         sessao.setAttribute("from", pagina.getUsuario().getNome());
         sessao.setAttribute("to", pagina.getContato().getNome());
+        
         sessao.setAttribute("categoria", pagina.getAlerta().getCategoria());
         sessao.setAttribute("titulo", pagina.getAlerta().getTitulo());
         sessao.setAttribute("mensagem", pagina.getAlerta().getMensagem());

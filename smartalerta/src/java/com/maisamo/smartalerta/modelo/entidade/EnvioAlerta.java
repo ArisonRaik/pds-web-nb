@@ -48,7 +48,7 @@ public class EnvioAlerta {
     }
     
     public String getDataHoraEnvio() {
-        return datahora_envio.format(DateTimeFormatter.ofPattern("dd/MM/uuuu - HH:mm:ss"));
+        return datahora_envio.format(DateTimeFormatter.ofPattern("dd-MM-uuuu / HH:mm:ss"));
     }
     
     public Alerta getAlerta() {

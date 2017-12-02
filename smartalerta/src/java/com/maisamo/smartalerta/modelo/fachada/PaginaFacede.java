@@ -9,6 +9,9 @@ import java.util.List;
 
 import com.maisamo.smartalerta.modelo.dao.PaginaDAO;
 import com.maisamo.smartalerta.modelo.entidade.Pagina;
+import com.maisamo.smartalerta.modelo.entidade.Alerta;
+import com.maisamo.smartalerta.modelo.entidade.Usuario;
+import com.maisamo.smartalerta.modelo.entidade.Contato;
 
 /**
  *
@@ -32,5 +35,9 @@ public class PaginaFacede {
     
     public Pagina procurarPorId(Long id) {
         return pdao.procurarPorId(id);
+    }
+    
+    public Pagina procurarRecente(Alerta alerta, Usuario usuario, Contato contato) {
+        return pdao.procurarRecente(alerta, usuario, contato);
     }
 }

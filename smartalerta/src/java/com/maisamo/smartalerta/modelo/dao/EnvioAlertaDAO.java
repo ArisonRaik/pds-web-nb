@@ -134,6 +134,7 @@ public class EnvioAlertaDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
+            ConexaoBanco.fecharResultSet(rs);
             ConexaoBanco.fecharInstrucao(preparador);
             ConexaoBanco.fecharConexao(conexao);
         }
@@ -165,6 +166,7 @@ public class EnvioAlertaDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
+            ConexaoBanco.fecharResultSet(rs);
             ConexaoBanco.fecharInstrucao(preparador);
             ConexaoBanco.fecharConexao(conexao);
         }

@@ -1296,7 +1296,7 @@ section.forms .btn-primary, section.forms .btn-secondary {
 */
 section.forms p {
   font-size: 0.8em;
-  color: #999;
+  color: #000;
 }
 
 section.forms input.form-control {

@@ -1,6 +1,6 @@
 <%-- 
-    Document   : cadastrar_alerta
-    Created on : 24/11/2017, 11:27:36
+    Document   : contatos_por_envio
+    Created on : 01/12/2017, 19:17:00
     Author     : wagner
 --%>
 
@@ -17,7 +17,7 @@
         <meta charset="utf-8">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>[Cadastrar Alerta] Smart Alerta!</title>
+        <title>[Contatos por envio] Smart Alerta!</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="all,follow">
@@ -43,7 +43,7 @@
         <!-- Tweaks for older IEs--><!--[if lt IE 9]>
             <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
             <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
-
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
     </head>
     <body>
         <!-- Side Navbar -->
@@ -61,10 +61,10 @@
                         <li> <a href="#alerta" data-toggle="collapse" aria-expanded="true"><i class="fa fa-bell" style="font-size: 20px"></i><span>Alerta</span>
                                 <div class="arrow pull-right"><i class="fa fa-angle-down" style="font-size: 20px"></i></div></a>
                             <ul id="alerta" class="list-unstyled">
-                                <li class="active"> <a href="cadastrar_alerta.jsp#"><i class="fa fa-plus-square" style="font-size: 18px"></i><span>Cadastrar Alerta</span></a></li>
+                                <li> <a href="cadastrar_alerta.jsp#"><i class="fa fa-plus-square" style="font-size: 18px"></i><span>Cadastrar Alerta</span></a></li>
                                 <li> <a href="EnviarAlerta"> <i class="fa fa-send" style="font-size: 16px"></i><span>Enviar Alerta</span></a></li>
                                 <li> <a href="VerAlertas"> <i class="fa fa-bell" style="font-size: 16px"></i><span>Ver Alertas</span></a></li>
-                                <li> <a href="AlertasEnviados"> <i class="fa fa-check-square" style="font-size: 18px"></i><span>Alertas Enviados</span></a></li>
+                                <li class="active"> <a href="AlertasEnviados"> <i class="fa fa-check-square" style="font-size: 18px"></i><span>Alertas Enviados</span></a></li>
                             </ul>
                         </li>
                         <li> <a href="#contato" data-toggle="collapse" aria-expanded="false"><i class="fa fa-address-book" style="font-size: 20px"></i><span>Contato</span>
@@ -97,40 +97,52 @@
                 <div class="container-fluid">
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="#">Início</a></li>
-                        <li class="breadcrumb-item active">Cadastrar Alerta</li>
+                        <li class="breadcrumb-item"><a href="AlertasEnviados">Alertas Enviados</a></li>
+                        <li class="breadcrumb-item active">Contatos por envio</li>
                     </ul>
                 </div>
             </div>
             <section class="forms">
                 <div class="container-fluid">
                     <header> 
-                        <h1 class="h1 display">Cadastrar Alerta</h1>
+                        <h1 class="h1 display">Contatos por envio</h1>
                     </header>
                     <div class="row">            
                         <div class="col-lg-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <form id="form_alerta" action="CadastrarAlerta" method="post">
-                                        <div class="form-group">
-                                            <label>Categoria</label>
-                                            <input name="categoria" placeholder="Categoria do Alerta" class="form-control" required>                
-                                        </div>
-                                        <div class="line"></div>
-                                        <div class="form-group">
-                                            <label>Titulo</label>
-                                            <input name="titulo" placeholder="Titulo do Alerta" class="form-control" required>                  
-                                        </div>
-                                        <div class="line"></div>
-                                        <label>Mensagem</label>
-                                        <div id="summernote"></div>
-                                        <input name="mensagem" type="hidden" required>
-
+                                    <form>
+                                        <table id="example" class="display" cellspacing="0" width="100%">
+                                            <thead>
+                                                <tr>
+                                                    <th>Nome</th>
+                                                    <th>E-mail</th>
+                                                    <th>Telefone</th>
+                                                </tr>
+                                            </thead>
+                                            <tfoot>
+                                                <tr>
+                                                    <th>Nome</th>
+                                                    <th>E-mail</th>
+                                                    <th>Telefone</th>
+                                                </tr>
+                                            </tfoot>
+                                            <tbody>
+                                            <c:forEach var="contato_por_envio" items="${contatos_por_envio}">
+                                                <tr>
+                                                    <td>${contato_por_envio.contato.nome}</td>
+                                                    <td>${contato_por_envio.contato.email}</td>
+                                                    <td>${contato_por_envio.contato.fone}</td>
+                                                </tr>                                                
+                                            </c:forEach>
+                                            </tbody>
+                                        </table>
                                         <div class="line"></div>
                                         <div class="form-group row">
-                                            <div class="col-sm-6"></div>
                                             <div class="col-sm-6">
-                                                <button type="submit" style="float: right" class="btn btn-primary">Salvar</button>
+                                                <button style="float: left" class="btn btn-primary" onclick="window.location.href='AlertasEnviados'">Voltar</button>
                                             </div>
+                                            <div class="col-sm-6"></div>
                                         </div>
                                     </form>
                                 </div>
@@ -139,44 +151,6 @@
                     </div>
                 </div>
             </section>
-
-            <!-- cadastro válido Modal-->
-            <div id="valido_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-center">
-                <div role="document" class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 id="exampleModalLabel" class="modal-title"><strong class="text-success">Sucesso!</strong></h4>
-                            <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">&times;</span></button>
-                        </div>
-                        <div class="modal-body">
-                            <p><strong class="text-success"><b class="text-primary">Alerta</b> cadastrado com sucesso.</strong></p>
-                            <p><strong class="text-success">Agora você pode enviá-lo para os seus contatos.</strong></p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" data-dismiss="modal" class="btn btn-primary">OK!</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- cadastro inválido Modal-->
-            <div id="invalido_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-center">
-                <div role="document" class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 id="exampleModalLabel" class="modal-title"><strong class="text-danger">Vixi!</strong></h4>
-                            <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">&times;</span></button>
-                        </div>
-                        <div class="modal-body">
-                            <p><strong class="text-danger">Cadastro de <b class="text-primary">alerta</b> malsucedido.</strong></p>
-                            <p><strong class="text-danger">Motivo: <b class="text-primary">Título</b> do alerta já está cadastrado.</strong></p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" data-dismiss="modal" class="btn btn-secondary">Fechar</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <footer class="main-footer">
                 <div class="container-fluid">
@@ -201,38 +175,35 @@
         <script src="vendor/jquery-validation/jquery.validate.min.js"></script>
         <script src="vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js"></script>
         <script src="js/front.js"></script>
-
-
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote-bs4.css" rel="stylesheet" />
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote-bs4.js"></script>
+        <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
         <script>
-            $('#summernote').summernote({
-                height: 300, // set editor height
-                minHeight: null, // set minimum height of editor
-                maxHeight: null, // set maximum height of editor
-                focus: true                  // set focus to editable area after initializing summernote
+            $(document).ready(function () {
+                $('#example').DataTable({
+                    "language": {
+                        "sEmptyTable": "Nenhum registro encontrado",
+                        "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+                        "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+                        "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+                        "sInfoPostFix": "",
+                        "sInfoThousands": ".",
+                        "sLengthMenu": "_MENU_ resultados por página",
+                        "sLoadingRecords": "Carregando...",
+                        "sProcessing": "Processando...",
+                        "sZeroRecords": "Nenhum registro encontrado",
+                        "sSearch": "Pesquisar",
+                        "oPaginate": {
+                            "sNext": "Próximo",
+                            "sPrevious": "Anterior",
+                            "sFirst": "Primeiro",
+                            "sLast": "Último"
+                        },
+                        "oAria": {
+                            "sSortAscending": ": Ordenar colunas de forma ascendente",
+                            "sSortDescending": ": Ordenar colunas de forma descendente"
+                        }
+                    }
+                });
             });
-            $("#form_alerta").submit(function (event) {
-                $('input[name="mensagem"]').val($('#summernote').summernote('code'));
-            });
-            $('input[name="mensagem"]').val($('#summernote').summernote('code'));
-        </script>     
-        <!-- Google Analytics: change UA-XXXXX-X to be your site's ID.-->
-        <c:choose>
-            <c:when test="${valido}">
-                <script>
-                    $(document).ready(function () {
-                        $("#valido_modal").modal();
-                    });
-                </script>
-            </c:when>
-            <c:when test="${valido == false}">
-                <script>
-                    $(document).ready(function () {
-                        $("#invalido_modal").modal();
-                    });
-                </script>
-            </c:when>
-        </c:choose>
+        </script>
     </body>
 </html>

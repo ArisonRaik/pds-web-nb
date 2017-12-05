@@ -57,22 +57,25 @@
                         <h1 class="h1 display"><strong>Olá, <b class="text-primary">${sessionScope.to}</b>!</strong></h1>
                     </header>
                     <div class="row">
-                        <div class="col-lg-2"></div>
-                        <div class="col-lg-8">
+                        <div class="col-lg-3"></div>
+                        <div class="col-lg-6">
                             <div class="card" style="text-align: justify">
                                 <div class="card-body">
                                     <h3 class="h3 display">
                                         Esta mensagem foi enviada por <b class="text-primary">${sessionScope.from}</b> para avisá-lo de que você tem algo importante, 
                                         sobre um(a) <b class="text-primary">${sessionScope.categoria}</b>, do(a) qual deve se lembrar.
                                     </h3>
-                                    <div class="line"></div>
+                                </div>
+                            </div></br>
+                            <div class="card" style="text-align: justify">
+                                <div class="card-body">
                                     <h2 class="h2 display"><strong class="text-primary">${sessionScope.titulo}</strong></h2>
                                     <div class="line"></div>
                                     ${sessionScope.mensagem}
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-2"></div>
+                        <div class="col-lg-3"></div>
                     </div>
                 </div>
             </section>
@@ -83,7 +86,7 @@
                             <p>Smart Alerta! &copy; 2017</p>
                         </div>
                         <div class="col-sm-6 text-right">
-                            <p>Design by <a href="#" class="external">Devops Group</a></p>
+                            <p>Design by <a href="#" class="external">DevOps Group</a></p>
                             <!-- Please do not remove the backlink to us unless you support further theme's development at https://bootstrapious.com/donate. It is part of the license conditions. Thank you for understanding :)-->
                         </div>
                     </div>

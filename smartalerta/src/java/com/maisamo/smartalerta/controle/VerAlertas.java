@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.maisamo.smartalerta.modelo.fachada.AlertaFacede;
+import com.maisamo.smartalerta.modelo.entidade.Alerta;
 import com.maisamo.smartalerta.modelo.entidade.Usuario;
 
 /**
@@ -68,9 +69,24 @@ public class VerAlertas extends HttpServlet {
         verificarSessao(request, response);
         
         Usuario usuario = (Usuario) sessao.getAttribute("usuario");
-
         sessao.setAttribute("alertas", af.listar(usuario));
-        response.sendRedirect("visualizar_alertas.jsp");
+        
+        String aid = request.getParameter("aid");
+        if (aid != null) {
+            Alerta alerta = af.procurarPorId(Long.parseLong(aid));
+            if (request.getParameter("edt") != null) {
+                request.setAttribute("editar_alerta", alerta);
+                request.setAttribute("editar", true); // mostrar modal de edição
+            } else {
+                sessao.setAttribute("excluir_alerta", alerta);
+                request.setAttribute("excluir", true); // mostrar modal de exclusão
+            }
+        } else if (request.getParameter("del") != null) {
+            Alerta excluir_alerta = (Alerta) sessao.getAttribute("excluir_alerta");
+            af.excluir(excluir_alerta);
+            request.setAttribute("excluido", true); // mostrar modal de excluído
+        }
+        request.getServletContext().getRequestDispatcher("/visualizar_alertas.jsp").forward(request, response);
     }
 
     /**
@@ -85,6 +101,22 @@ public class VerAlertas extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         verificarSessao(request, response);
+        
+        Long id = Long.parseLong(request.getParameter("alertaId"));
+        String categoria = request.getParameter("categoria");
+        String titulo = request.getParameter("titulo");
+        String mensagem = request.getParameter("mensagem");
+        
+        Alerta editar_alerta = new Alerta();
+        editar_alerta.setId(id);
+        editar_alerta.setCategoria(categoria);
+        editar_alerta.setTitulo(titulo);
+        editar_alerta.setMensagem(mensagem);
+        
+        af.atualizar(editar_alerta);
+        
+        request.setAttribute("atualizado", true); // mostrar modal de atualizado/editado
+        request.getServletContext().getRequestDispatcher("/visualizar_alertas.jsp").forward(request, response);
     }
 
     private void verificarSessao(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

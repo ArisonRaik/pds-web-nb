@@ -187,7 +187,7 @@
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h3 id="exampleModalLabel" class="modal-title"><strong class="text-success">Contato atualizado!</strong></h3>
-                                        <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">&times;</span></button>
+                                        <button type="button" data-dismiss="modal" aria-label="Close" onclick="window.location.href='VerContatos'" class="close"><span aria-hidden="true">&times;</span></button>
                                     </div>
                                     <div class="modal-body">
                                         <strong class="text-success">As alterações foram salvas.</strong>
@@ -208,7 +208,7 @@
                                         <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">&times;</span></button>
                                     </div>
                                     <div class="modal-body">
-                                        <strong class="text-danger">Você está prestes a <u>EXCLUIR</u> <b class="text-primary">${sessionScope.excluir_contato.nome}</b> da sua lista de contatos.</strong></br>
+                                        <strong class="text-danger">Você está prestes a excluir <b class="text-primary">${sessionScope.excluir_contato.nome}</b> da sua lista de contatos.</strong></br>
                                         <strong class="text-danger">Esta ação não poderá ser revertida, deseja prosseguir?</strong>
                                     </div>
                                     <div class="modal-footer">
@@ -225,7 +225,7 @@
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h3 id="exampleModalLabel" class="modal-title"><strong class="text-primary">Contato Excluído</strong></h3>
-                                        <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">&times;</span></button>
+                                        <button type="button" data-dismiss="modal" aria-label="Close" onclick="window.location.href='VerContatos'" class="close"><span aria-hidden="true">&times;</span></button>
                                     </div>
                                     <div class="modal-body">
                                         <strong class="text-primary">O contato foi exclúido com sucesso.</strong>

@@ -135,8 +135,8 @@
                                                     <td>${alerta.categoria}</td>
                                                     <td>${alerta.titulo}</td>
                                                     <td>${alerta.mensagem}</td>
-                                                    <td><button name="${alerta.id}" type="button" data-toggle="modal" data-target="#editar_modal" class="btn btn-outline-info">Editar</button></td>
-                                                    <td><button name="${alerta.id}" type="button" data-toggle="modal" data-target="#excluir_modal" class="btn btn-outline-danger">Excluir</button></td>
+                                                    <td><button type="button" onclick="window.location.href='VerAlertas?aid=${alerta.id}&edt=true'" class="btn btn-outline-info">Editar</button></td>
+                                                    <td><button type="button" onclick="window.location.href='VerAlertas?aid=${alerta.id}'" class="btn btn-outline-danger">Excluir</button></td>
                                                 </tr>
                                             </c:forEach>
                                         </tbody>
@@ -154,7 +154,7 @@
                                         <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">&times;</span></button>
                                     </div>
                                     <div class="modal-body" >
-                                        <form method="post" action="EditarAlerta">
+                                        <form method="post" action="VerAlertas">
                                             <div class="form-group">
                                                 <label>Categoria</label>
                                                 <input name="categoria" type="text" value="${editar_alerta.categoria}" class="form-control">
@@ -166,30 +166,32 @@
                                             </div>     
                                             <div class="line"></div>
                                             <label>Mensagem</label>
-                                            <div id="summernote"><p>${editar_alerta.mensagem}</p></div>
+                                            <div id="summernote">${editar_alerta.mensagem}</div>
                                             <input name="mensagem" type="hidden">
+                                            <input name="alertaId" type="hidden" value="${editar_alerta.id}" class="form-control">
+                                            <div class="line"></div>
+                                            <div class="form-group">
+                                                <button type="button" style="float:left" data-dismiss="modal" class="btn btn-secondary">Cancelar</button>  
+                                                <button type="submit" style="float:right" class="btn btn-primary">Salvar</button>
+                                            </div>
                                         </form>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" style="float:left" data-dismiss="modal" class="btn btn-secondary">Cancelar</button>  
-                                        <button type="submit" style="float:right" class="btn btn-primary">Salvar</button>
                                     </div>
                                 </div>
                             </div>
                         </div>  
                         <!-- atualizado Modal-->
-                        <div id="excluir_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">
+                        <div id="atualizado_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">
                             <div role="document" class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h3 id="exampleModalLabel" class="modal-title"><strong class="text-success">Alerta atualizado!</strong></h3>
-                                        <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">&times;</span></button>
+                                        <button type="button" data-dismiss="modal" aria-label="Close" onclick="window.location.href='VerAlertas'" class="close"><span aria-hidden="true">&times;</span></button>
                                     </div>
                                     <div class="modal-body">
-                                        <h4>As mudanças foram salvas.</h4>
+                                        <strong class="text-success">As mudanças foram salvas.</strong>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" style="float:left" data-dismiss="modal" class="btn btn-secondary">Fechar</button>
+                                        <button type="button" style="float:left" data-dismiss="modal" onclick="window.location.href='VerAlertas'" class="btn btn-secondary">Fechar</button>
                                     </div>
                                 </div>
                             </div>
@@ -204,12 +206,12 @@
                                         <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">&times;</span></button>
                                     </div>
                                     <div class="modal-body">
-                                        <h4>Você está prestes a excluir este <b>Alerta</b>.
-                                            Esta ação não poderá ser revertida, deseja prosseguir?</h4>
+                                        <strong class="text-danger">Você está prestes a excluir este alerta.</strong></br>
+                                            <strong class="text-danger">Esta ação não poderá ser revertida, deseja prosseguir?</strong>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" style="float:left" data-dismiss="modal" class="btn btn-secondary">Não</button>
-                                        <button type="button" onclick="window.location.href = 'ExcluirAlerta'" style="float:right" class="btn btn-primary">Sim</button>
+                                        <button type="button" onclick="window.location.href='VerAlertas?del=true'" style="float:right" class="btn btn-primary">Sim</button>
                                     </div>
                                 </div>
                             </div>
@@ -220,14 +222,17 @@
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h3 id="exampleModalLabel" class="modal-title"><strong class="text-primary">Alerta Excluído</strong></h3>
-                                        <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">&times;</span></button>
+                                        <button type="button" data-dismiss="modal" aria-label="Close" onclick="window.location.href='VerAlertas'" class="close"><span aria-hidden="true">&times;</span></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <strong class="text-primary">O alerta foi exclúido com sucesso.</strong>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" style="float:right" data-dismiss="modal" class="btn btn-secondary">Fechar</button>
+                                        <button type="button" style="float:right" data-dismiss="modal" onclick="window.location.href='VerAlertas'" class="btn btn-secondary">Fechar</button>
                                     </div>
                                 </div>
                             </div>
-                        </div>     
+                        </div>
                     </div>
                 </div>
             </section>
@@ -297,7 +302,39 @@
                     }
                 });
             });
-        </script>    
+        </script>
+        <script>
+            <c:choose>
+                <c:when test="${editar}">
+                    <script>
+                        $(document).ready(function () {
+                            $("#editar_modal").modal();
+                        });
+                    </script>
+                </c:when>
+                <c:when test="${excluir}">
+                    <script>
+                        $(document).ready(function () {
+                            $("#excluir_modal").modal();
+                        });
+                    </script>
+                </c:when>
+                <c:when test="${atualizado}">
+                    <script>
+                        $(document).ready(function () {
+                            $("#atualizado_modal").modal();
+                        });
+                    </script>
+                </c:when>
+                <c:when test="${excluido}">
+                    <script>
+                        $(document).ready(function () {
+                            $("#excluido_modal").modal();
+                        });
+                    </script>
+                </c:when>
+            </c:choose>
+        </script>
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID.-->
     </body>
 </html>

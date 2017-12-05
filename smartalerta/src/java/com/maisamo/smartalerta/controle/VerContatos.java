@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.maisamo.smartalerta.modelo.fachada.ContatoFacede;
+import com.maisamo.smartalerta.modelo.entidade.Contato;
 import com.maisamo.smartalerta.modelo.entidade.Usuario;
 
 /**
@@ -68,9 +69,24 @@ public class VerContatos extends HttpServlet {
         verificarSessao(request, response);
 
         Usuario usuario = (Usuario) sessao.getAttribute("usuario");
-
         sessao.setAttribute("contatos", cf.listar(usuario));
-        response.sendRedirect("visualizar_contatos.jsp");
+        
+        String cid = request.getParameter("cid");
+        if (cid != null) {
+            Contato contato = cf.procurarPorId(Long.parseLong(cid));
+            if (request.getParameter("edt") != null) {
+                request.setAttribute("editar_contato", contato);
+                request.setAttribute("editar", true); // mostrar modal de edição
+            } else {
+                sessao.setAttribute("excluir_contato", contato);
+                request.setAttribute("excluir", true); // mostrar modal de exclusão
+            }
+        } else if (request.getParameter("del") != null) {
+            Contato excluir_contato = (Contato) sessao.getAttribute("excluir_contato");
+            cf.excluir(excluir_contato);
+            request.setAttribute("excluido", true); // mostrar modal de excluído
+        }
+        request.getServletContext().getRequestDispatcher("/visualizar_contatos.jsp").forward(request, response);
     }
 
     /**
@@ -85,6 +101,22 @@ public class VerContatos extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         verificarSessao(request, response);
+        
+        Long id = Long.parseLong(request.getParameter("contatoId"));
+        String nome = request.getParameter("contatoNome");
+        String email = request.getParameter("contatoEmail");
+        String fone = request.getParameter("contatoFone");
+        
+        Contato editar_contato = new Contato();
+        editar_contato.setId(id);
+        editar_contato.setNome(nome);
+        editar_contato.setEmail(email);
+        editar_contato.setFone(fone);
+        
+        cf.atualizar(editar_contato);
+        
+        request.setAttribute("atualizado", true); // mostrar modal de atualizado/editado
+        request.getServletContext().getRequestDispatcher("/visualizar_contatos.jsp").forward(request, response);
     }
 
     private void verificarSessao(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

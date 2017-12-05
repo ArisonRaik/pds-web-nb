@@ -125,15 +125,15 @@
                                                             <label>Categoria</label>                  
                                                             <select name="sel_categoria" class="form-control" onchange="this.form.submit()" required>
                                                                 <option>${sel_categoria}</option>
-                                                                <c:forEach var="categoria" items="${categorias}">
+                                                                <c:forEach var="categoria" items="${sessionScope.categorias}">
                                                                     <option value="${categoria}">${categoria}</option>
                                                                 </c:forEach>
-                                                            </select>                
+                                                            </select>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>                    
-                                        </div>   
+                                        </div>
                                     </form>
                                     <form class="form-horizontal" method="post" action="EnviarAlerta">
                                         <div class="form-group row">            
@@ -149,7 +149,7 @@
                                                                 </c:forEach>
                                                             </select>
                                                         </div>
-                                                        <div class="line"></div><br/>
+                                                        <div class="line"></div></br>
                                                         <h2 class="h5 display"><strong class="text-primary">Quem deve receber este alerta?</strong></h2>
                                                         <div class="line"></div>
                                                         <table id="example" class="display" cellspacing="0" width="100%">
@@ -293,7 +293,7 @@
                     }
                 });
             });
-        </script>    
+        </script>
         <c:choose>
             <c:when test="${valido}">
                 <script>

@@ -135,8 +135,8 @@
                                                     <td>${contato.nome}</td>
                                                     <td>${contato.email}</td>
                                                     <td>${contato.fone}</td>
-                                                    <td><button name="${contato.id}" type="button" data-toggle="modal" data-target="#editar_modal" class="btn btn-outline-info">Editar</button></td>
-                                                    <td><button name="${contato.id}" type="button" data-toggle="modal" data-target="#excluir_modal" class="btn btn-outline-danger">Excluir</button></td>
+                                                    <td><button type="button" onclick="window.location.href='VerContatos?cid=${contato.id}&edt=true'" class="btn btn-outline-info">Editar</button></td>
+                                                    <td><button type="button" onclick="window.location.href='VerContatos?cid=${contato.id}'" class="btn btn-outline-danger">Excluir</button></td>
                                                 </tr>
                                             </c:forEach>
                                         </tbody>
@@ -150,37 +150,39 @@
                             <div role="document" class="modal-dialog modal-lg">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h3 id="exampleModalLabel" class="modal-title text-primary"><strong class="text-primary">Editar Alerta</strong></h3>
+                                        <h3 id="exampleModalLabel" class="modal-title text-primary"><strong class="text-primary">Editar Contato</strong></h3>
                                         <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">&times;</span></button>
                                     </div>
                                     <div class="modal-body" >
-                                        <form method="post" action="EditarContato">
+                                        <form method="post" action="VerContatos">
                                             <div class="form-group">
                                                 <label>Nome</label>
-                                                <input name="nomeContato" type="text" value="${editar_contato.nome}" class="form-control">
+                                                <input name="contatoNome" type="text" value="${editar_contato.nome}" class="form-control">
                                             </div>
                                             <div class="line"></div>
                                             <div class="form-group">       
                                                 <label>E-mail</label>
-                                                <input name="emailContato" type="text" value="${editar_contato.email}" class="form-control">
+                                                <input name="contatoEmail" type="text" value="${editar_contato.email}" class="form-control">
                                             </div>     
                                             <div class="line"></div>
                                             <div class="form-group">       
                                                 <label>Telefone</label>
-                                                <input id="fone" name="foneContato" type="text" value="${editar_contato.fone}" class="form-control">
+                                                <input id="fone" name="contatoFone" type="text" value="${editar_contato.fone}" class="form-control">
+                                            </div>
+                                            <input name="contatoId" type="hidden" value="${editar_contato.id}" class="form-control">
+                                            <div class="line"></div>
+                                            <div class="form-group">
+                                                <button type="button" style="float:left" data-dismiss="modal" class="btn btn-secondary">Cancelar</button>  
+                                                <button type="submit" style="float:right" class="btn btn-primary">Salvar</button>
                                             </div>
                                         </form>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" style="float:left" data-dismiss="modal" class="btn btn-secondary">Cancelar</button>  
-                                        <button type="submit" style="float:right" class="btn btn-primary">Salvar</button>
                                     </div>
                                 </div>
                             </div>
                         </div>  
 
                         <!-- atualizado Modal-->
-                        <div id="excluir_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">
+                        <div id="atualizado_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-center">
                             <div role="document" class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -188,10 +190,10 @@
                                         <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">&times;</span></button>
                                     </div>
                                     <div class="modal-body">
-                                        <h4 class="text-success">As alterações foram salvas.</h4>
+                                        <strong class="text-success">As alterações foram salvas.</strong>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" data-dismiss="modal" class="btn btn-secondary">OK!</button>
+                                        <button type="button" data-dismiss="modal" onclick="window.location.href='VerContatos'" class="btn btn-primary">OK!</button>
                                     </div>
                                 </div>
                             </div>
@@ -206,12 +208,12 @@
                                         <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">&times;</span></button>
                                     </div>
                                     <div class="modal-body">
-                                        <h4>Você está prestes a <b class="text-danger">EXCLUIR</b> este <b>Contato</b>.
-                                            Esta ação não poderá ser revertida, deseja prosseguir?</h4>
+                                        <strong class="text-danger">Você está prestes a <u>EXCLUIR</u> <b class="text-primary">${sessionScope.excluir_contato.nome}</b> da sua lista de contatos.</strong></br>
+                                        <strong class="text-danger">Esta ação não poderá ser revertida, deseja prosseguir?</strong>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" style="float:left" data-dismiss="modal" class="btn btn-secondary">Não</button>
-                                        <button type="button" onclick="window.location.href = 'ExcluirContato'" style="float:right" class="btn btn-primary">Sim</button>
+                                        <button type="button" onclick="window.location.href='VerContatos?del=true'" style="float:right" class="btn btn-primary">Sim</button>
                                     </div>
                                 </div>
                             </div>
@@ -222,11 +224,14 @@
                             <div role="document" class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h3 id="exampleModalLabel" class="modal-title"><strong class="text-success">Contato Excluído</strong></h3>
+                                        <h3 id="exampleModalLabel" class="modal-title"><strong class="text-primary">Contato Excluído</strong></h3>
                                         <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">&times;</span></button>
                                     </div>
+                                    <div class="modal-body">
+                                        <strong class="text-primary">O contato foi exclúido com sucesso.</strong>
+                                    </div>
                                     <div class="modal-footer">
-                                        <button type="button" data-dismiss="modal" class="btn btn-secondary">Fechar</button>
+                                        <button type="button" data-dismiss="modal" onclick="window.location.href='VerContatos'" class="btn btn-secondary">Fechar</button>
                                     </div>
                                 </div>
                             </div>
@@ -301,6 +306,36 @@
                 });
             });
         </script>
+        <c:choose>
+            <c:when test="${editar}">
+                <script>
+                    $(document).ready(function () {
+                        $("#editar_modal").modal();
+                    });
+                </script>
+            </c:when>
+            <c:when test="${excluir}">
+                <script>
+                    $(document).ready(function () {
+                        $("#excluir_modal").modal();
+                    });
+                </script>
+            </c:when>
+            <c:when test="${atualizado}">
+                <script>
+                    $(document).ready(function () {
+                        $("#atualizado_modal").modal();
+                    });
+                </script>
+            </c:when>
+            <c:when test="${excluido}">
+                <script>
+                    $(document).ready(function () {
+                        $("#excluido_modal").modal();
+                    });
+                </script>
+            </c:when>
+        </c:choose>
         <script>
             document.getElementById('fone').addEventListener('input', function (e) {
                 var x = e.target.value.replace(/\D/g, '').match(/(\d{0,2})(\d{0,5})(\d{0,4})/);

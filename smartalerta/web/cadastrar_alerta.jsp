@@ -27,7 +27,7 @@
         <link rel="stylesheet" href="vendor/font-awesome/css/font-awesome.min.css">
         <!-- Custom icon font-->
         <link rel="stylesheet" href="css/fontastic.css">
-        <!-- Google fonts - Roboto
+        <!-- Google fonts - Roboto 
         <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700">
         -->
         <!-- jQuery Circle-->
@@ -121,10 +121,10 @@
                                             <input name="titulo" placeholder="Titulo do Alerta" class="form-control" required>                  
                                         </div>
                                         <div class="line"></div>
-                                        <label>Mensagem</label>
-                                        <div id="summernote"></div>
-                                        <input name="mensagem" type="hidden" required>
-
+                                        <div class="form-group">       
+                                            <label>Mensagem</label>
+                                            <textarea name="mensagem" rows="5" style="resize: vertical" placeholder="Mensagem do Alerta" class="form-control" required></textarea>
+                                        </div>
                                         <div class="line"></div>
                                         <div class="form-group row">
                                             <div class="col-sm-6"></div>
@@ -200,23 +200,7 @@
         <script src="js/grasp_mobile_progress_circle-1.0.0.min.js"></script>
         <script src="vendor/jquery-validation/jquery.validate.min.js"></script>
         <script src="vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js"></script>
-        <script src="js/front.js"></script>
-
-
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote-bs4.css" rel="stylesheet" />
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote-bs4.js"></script>
-        <script>
-            $('#summernote').summernote({
-                height: 300, // set editor height
-                minHeight: null, // set minimum height of editor
-                maxHeight: null, // set maximum height of editor
-                focus: true                  // set focus to editable area after initializing summernote
-            });
-            $("#form_alerta").submit(function (event) {
-                $('input[name="mensagem"]').val($('#summernote').summernote('code'));
-            });
-            $('input[name="mensagem"]').val($('#summernote').summernote('code'));
-        </script>     
+        <script src="js/front.js"></script>   
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID.-->
         <c:choose>
             <c:when test="${valido}">

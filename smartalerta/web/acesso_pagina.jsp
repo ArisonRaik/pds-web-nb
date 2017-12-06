@@ -54,28 +54,21 @@
             <section class="forms">
                 <div class="container-fluid">
                     <header style="text-align: center"> 
-                        <h1 class="h1 display"><strong>Olá, <b class="text-primary">${sessionScope.to}</b>!</strong></h1>
+                        <h1 class="h1 display"><strong class="text-primary">${sessionScope.titulo}</strong></h1>
                     </header>
                     <div class="row">
-                        <div class="col-lg-3"></div>
-                        <div class="col-lg-6">
-                            <div class="card" style="text-align: justify">
+                        <div class="col-lg-2"></div>
+                        <div class="col-lg-8">
+                            <div class="card">
                                 <div class="card-body">
-                                    <h3 class="h3 display">
-                                        Esta mensagem foi enviada por <b class="text-primary">${sessionScope.from}</b> para avisá-lo de que você tem algo importante, 
-                                        sobre um(a) <b class="text-primary">${sessionScope.categoria}</b>, do(a) qual deve se lembrar.
-                                    </h3>
-                                </div>
-                            </div></br>
-                            <div class="card" style="text-align: justify">
-                                <div class="card-body">
-                                    <h2 class="h2 display"><strong class="text-primary">${sessionScope.titulo}</strong></h2>
+                                    <h3 class="h3 display" style="text-indent: 25px">${sessionScope.mensagem}</h3>
                                     <div class="line"></div>
-                                    ${sessionScope.mensagem}
+                                    <strong style="float:left">Mensagem sobre <b class="text-primary">${sessionScope.categoria}</b></strong>
+                                    <strong style="float:right">De <b class="text-primary">${sessionScope.from}</b> para <b class="text-primary">${sessionScope.to}</b></strong>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-3"></div>
+                        <div class="col-lg-2"></div>
                     </div>
                 </div>
             </section>

@@ -38,7 +38,7 @@ public class Enviador {
     
     public void setContato(Contato contato) {
         this.contato = contato;
-        nomeTo = contato.getNome();
+        nomeTo = contato.getNome().split(" ")[0];
         emailTo = contato.getEmail();
         foneTo = contato.getFone();
     }

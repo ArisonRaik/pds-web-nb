@@ -157,17 +157,18 @@
                                         <form method="post" action="VerAlertas">
                                             <div class="form-group">
                                                 <label>Categoria</label>
-                                                <input name="categoria" type="text" value="${editar_alerta.categoria}" class="form-control">
+                                                <input name="categoria" placeholder="Categoria do Alerta" type="text" value="${editar_alerta.categoria}" class="form-control" required>
                                             </div>
                                             <div class="line"></div>
                                             <div class="form-group">       
                                                 <label>Título</label>
-                                                <input name="titulo" type="text" value="${editar_alerta.titulo}" class="form-control">
+                                                <input name="titulo" placeholder="Título do Alerta" type="text" value="${editar_alerta.titulo}" class="form-control" required>
                                             </div>     
                                             <div class="line"></div>
-                                            <label>Mensagem</label>
-                                            <div id="summernote">${editar_alerta.mensagem}</div>
-                                            <input name="mensagem" type="hidden">
+                                            <div class="form-group">       
+                                                <label>Mensagem</label>
+                                                <textarea name="mensagem" placeholder="Mensagem do Alerta" class="form-control" rows="5" style="resize: vertical" required>${editar_alerta.mensagem}</textarea>
+                                            </div>
                                             <input name="alertaId" type="hidden" value="${editar_alerta.id}" class="form-control">
                                             <div class="line"></div>
                                             <div class="form-group">
@@ -260,20 +261,6 @@
         <script src="vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js"></script>
         <script src="js/front.js"></script>
         <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote-bs4.css" rel="stylesheet" />
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote-bs4.js"></script>
-        <script>
-                            $('#summernote').summernote({
-                                height: 200, // set editor height
-                                minHeight: null, // set minimum height of editor
-                                maxHeight: null, // set maximum height of editor
-                                focus: true                  // set focus to editable area after initializing summernote
-                            });
-                            $("#form_alerta").submit(function (event) {
-                                $('input[name="mensagem"]').val($('#summernote').summernote('code'));
-                            });
-                            $('input[name="mensagem"]').val($('#summernote').summernote('code'));
-        </script> 
         <script>
             $(document).ready(function () {
                 $('#example').DataTable({
@@ -303,38 +290,36 @@
                 });
             });
         </script>
-        <script>
-            <c:choose>
-                <c:when test="${editar}">
-                    <script>
-                        $(document).ready(function () {
-                            $("#editar_modal").modal();
-                        });
-                    </script>
-                </c:when>
-                <c:when test="${excluir}">
-                    <script>
-                        $(document).ready(function () {
-                            $("#excluir_modal").modal();
-                        });
-                    </script>
-                </c:when>
-                <c:when test="${atualizado}">
-                    <script>
-                        $(document).ready(function () {
-                            $("#atualizado_modal").modal();
-                        });
-                    </script>
-                </c:when>
-                <c:when test="${excluido}">
-                    <script>
-                        $(document).ready(function () {
-                            $("#excluido_modal").modal();
-                        });
-                    </script>
-                </c:when>
-            </c:choose>
-        </script>
+        <c:choose>
+            <c:when test="${editar}">
+                <script>
+                    $(document).ready(function () {
+                        $("#editar_modal").modal();
+                    });
+                </script>
+            </c:when>
+            <c:when test="${excluir}">
+                <script>
+                    $(document).ready(function () {
+                        $("#excluir_modal").modal();
+                    });
+                </script>
+            </c:when>
+            <c:when test="${atualizado}">
+                <script>
+                    $(document).ready(function () {
+                        $("#atualizado_modal").modal();
+                    });
+                </script>
+            </c:when>
+            <c:when test="${excluido}">
+                <script>
+                    $(document).ready(function () {
+                        $("#excluido_modal").modal();
+                    });
+                </script>
+            </c:when>
+        </c:choose>
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID.-->
     </body>
 </html>

@@ -1299,25 +1299,25 @@ section.forms p {
   color: #000;
 }
 
-section.forms input.form-control {
+section.forms input.form-control, textarea.form-control {
   border-radius: 0;
 }
 
-section.forms input.form-control::-moz-placeholder {
+section.forms input.form-control::-moz-placeholder, textarea.form-control::-moz-placeholder {
   font-size: 0.75em;
   font-weight: 300;
   color: #aaa;
   font-family: "Roboto", sans-serif;
 }
 
-section.forms input.form-control::-webkit-input-placeholder {
+section.forms input.form-control::-webkit-input-placeholder, textarea.form-control::-webkit-input-placeholder {
   font-size: 0.75em;
   font-weight: 300;
   color: #aaa;
   font-family: "Roboto", sans-serif;
 }
 
-section.forms input.form-control:-ms-input-placeholder {
+section.forms input.form-control:-ms-input-placeholder, textarea.form-control:-ms-input-placeholder {
   font-size: 0.75em;
   font-weight: 300;
   color: #aaa;
@@ -1409,13 +1409,13 @@ section.forms .input-group-btn .dropdown-menu a {
   section.forms input.form-control {
     border-radius: 0;
   }
-  section.forms input.form-control::-moz-placeholder {
+  section.forms input.form-control::-moz-placeholder, textarea.form-control::-moz-placeholder {
     font-size: 0.85em;
   }
-  section.forms input.form-control::-webkit-input-placeholder {
+  section.forms input.form-control::-webkit-input-placeholder, textarea.form-control::-webkit-input-placeholder {
     font-size: 0.85em;
   }
-  section.forms input.form-control:-ms-input-placeholder {
+  section.forms input.form-control:-ms-input-placeholder, textarea.form-control:-ms-input-placeholder {
     font-size: 0.85em;
   }
   section.forms p {

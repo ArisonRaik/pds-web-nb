@@ -80,8 +80,7 @@ public class AcessarPagina extends HttpServlet {
         
         sessao = request.getSession(true);
         sessao.setAttribute("from", pagina.getUsuario().getNome());
-        String[] to = pagina.getContato().getNome().split(" ");
-        sessao.setAttribute("to", to[0]);
+        sessao.setAttribute("to",pagina.getContato().getNome());
         
         sessao.setAttribute("categoria", pagina.getAlerta().getCategoria());
         sessao.setAttribute("titulo", pagina.getAlerta().getTitulo());

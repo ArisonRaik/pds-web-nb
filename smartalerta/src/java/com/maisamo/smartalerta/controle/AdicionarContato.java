@@ -89,16 +89,16 @@ public class AdicionarContato extends HttpServlet {
         String fone = request.getParameter("contatoFone");
         
         Usuario u = (Usuario) sessao.getAttribute("usuario");
-        
+       /* 
         if (cf.procurar(nome, "nome", u)) {
-            valido = false;
-        } else {
+            valido = false;{*/
+        
             Contato c = new Contato(u);
             c.setNome(nome);
             c.setEmail(email);
             c.setFone(fone);
             cf.inserir(c);
-        }
+        
         request.setAttribute("valido", valido);
         request.getServletContext().getRequestDispatcher("/adicionar_contato.jsp").forward(request, response);
     }
